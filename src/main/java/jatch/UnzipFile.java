@@ -5,7 +5,7 @@ import java.util.zip.*;
 
 public class UnzipFile {
     public static void main(String[] args) throws IOException {
-        String fileZip = "compressed.zip";
+        String fileZip = "test.sb2";
         byte[] buffer = new byte[1024];
         ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip));
         ZipEntry zipEntry = zis.getNextEntry();

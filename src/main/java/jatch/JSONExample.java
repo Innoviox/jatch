@@ -16,8 +16,8 @@ public class JSONExample {
 		String json = new String(Files.readAllBytes(Paths.get("project.json")), StandardCharsets.UTF_8);
 		Map<String, Object> arg = new HashMap<String, Object>();
 		arg.put(JsonReader.USE_MAPS, true);
-		Map<String, Object> data = (Map<String, Object>) JsonReader.jsonToJava(json, arg);
-		Object[] children = (Object[]) data.get("children");
+		Map<String, Object[]> data = (Map<String, Object[]>) JsonReader.jsonToJava(json, arg);
+		Object[] children = data.get("children");
 		Object scripts = ((Map) children[0]).get("scripts");
 		System.out.println(Arrays.deepToString((Object[]) scripts));
 	}
