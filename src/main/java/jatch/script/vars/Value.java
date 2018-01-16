@@ -1,4 +1,4 @@
-package main.java.jatch.interfaces;
+package main.java.jatch.script.vars;
 
 public class Value {
 	private int val;

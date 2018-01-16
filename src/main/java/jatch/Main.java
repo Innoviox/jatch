@@ -1,6 +1,7 @@
 package main.java.jatch;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import main.java.jatch.files.*;
 
@@ -10,5 +11,6 @@ public class Main {
 		String dir = "test/";
 		Unzipper.unzip(filename, dir);
 		Map<String, Object[]> data = Reader.read(dir + "project.json");
+		System.out.println(Reader.extractScripts(Reader.getChild(data, 0)));
 	}
 }
