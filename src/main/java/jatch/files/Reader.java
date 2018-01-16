@@ -1,4 +1,4 @@
-package main.java.jatch;
+package main.java.jatch.files;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

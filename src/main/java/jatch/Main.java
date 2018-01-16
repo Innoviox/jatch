@@ -2,6 +2,7 @@ package main.java.jatch;
 
 import java.io.IOException;
 import java.util.Map;
+import main.java.jatch.files.*;
 
 public class Main {
 	public static void main(String[] args) throws IOException {

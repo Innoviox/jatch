@@ -1,4 +1,4 @@
-package main.java.jatch;
+package main.java.jatch.files;
 
 import java.io.*;
 import java.util.zip.*;
