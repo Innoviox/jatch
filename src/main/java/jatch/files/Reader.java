@@ -38,16 +38,17 @@ public class Reader {
 			Object[] scriptL = (Object[]) ((Object[]) scriptHolder)[2];
 			for (Object _script: scriptL) {
 				Object[] script = (Object[]) _script;
-				List<String> inputs = new ArrayList<String>();
+				List<Object> inputs = new ArrayList<Object>();
 				String cmd = (String) script[0];
-				for (int i = 1; i < script.length; i++) inputs.add(script[i].toString());
+				for (int i = 1; i < script.length; i++) inputs.add(script[i]);
 				extracted.add(new Script(cmd, inputs));
 			}
 		}
 		
 		return extracted;
 	}
-	public String getJavaFunction(String scratchMethod) {
+	
+	public static String getJavaFunction(String scratchMethod) {
 		return null;
 	}
 	
