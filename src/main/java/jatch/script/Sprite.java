@@ -197,11 +197,13 @@ public abstract class Sprite implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		whenClicked();
+		// whenClicked();
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {	}
+	public void mousePressed(MouseEvent e) {	
+		whenClicked();
+	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) { }

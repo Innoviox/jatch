@@ -50,6 +50,7 @@ public class Controller implements KeyListener, MouseListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+		/*
 		try {
 			whenKeyPressed(KeyEvent.getKeyText(e.getKeyCode()));
 		} catch (NoSuchMethodException e1) {
@@ -62,6 +63,7 @@ public class Controller implements KeyListener, MouseListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		*/
 	}
 
 	@Override
