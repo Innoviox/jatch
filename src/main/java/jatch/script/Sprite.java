@@ -1,6 +1,7 @@
 package main.java.jatch.script;
 
 import java.awt.Color;
+import java.util.List;
 
 import main.java.jatch.script.vars.ShowableList;
 import main.java.jatch.script.vars.Value;
@@ -137,9 +138,11 @@ public abstract class Sprite {
 		while (!cond) {};
 	}
 	
+	/*
 	void stop(String process) {
 		if (process.equals("all")) controller.stop();
 	}
+	*/
 	
 	void clone(Sprite thing) {
 		
@@ -179,4 +182,12 @@ public abstract class Sprite {
 	Variable current(String s) { return null; }
 	int daysSince2000() { return 0; }
 	String username() { return ""; }
+	
+	// Hooks
+	public abstract List<Script> whenFlagClicked();
+	public abstract List<Script> whenKeyPressed(String key);
+	public abstract List<Script> whenClicked();
+	public abstract List<Script> whenBackdropSwitches(String newbn);
+	public abstract List<Script> whenAttrGreater(String attr, Value val);
+	public abstract List<Script> whenIRecieve(String msg);
 }

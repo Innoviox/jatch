@@ -16,7 +16,7 @@ public class Main {
 		Map<String, Object[]> data = Reader.read(dir + "project.json");
 		List<Script> scripts = Reader.extractScripts(Reader.getChild(data, 0));
 		for (Script s: scripts) {
-			s.call(new TestSprite());
+			s.call(new Test());
 		}
 	}
 }
