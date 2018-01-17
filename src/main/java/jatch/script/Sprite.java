@@ -1,17 +1,20 @@
 package main.java.jatch.script;
 
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import main.java.jatch.script.vars.ShowableList;
 import main.java.jatch.script.vars.Value;
 import main.java.jatch.script.vars.Variable;
 
-public abstract class Sprite {
+public abstract class Sprite implements MouseListener {
 	// Variables
 	public Variable xPos, yPos, dir, costumeN, backName, size, vol, tempo, answer, loudness, timer;
 	private Thread thread;
 	private Controller controller;
+	private boolean touchingPtr;
 	/* public Map<String, Variable> vars = new HashMap(); */
 	
 	// Motion
@@ -190,4 +193,26 @@ public abstract class Sprite {
 	public abstract List<Script> whenBackdropSwitches(String newbn);
 	public abstract List<Script> whenAttrGreater(String attr, Value val);
 	public abstract List<Script> whenIRecieve(String msg);
+	
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		whenClicked();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) { }
+
+	@Override
+	public void mouseEntered(MouseEvent e) { 
+		touchingPtr = true;
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) { 
+		touchingPtr = false;
+	}
 }
