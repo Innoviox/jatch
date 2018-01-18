@@ -16,7 +16,7 @@ public class DrawController {
 
     public DrawController(Controller c) { 
     		controller = c; 
-    		canvas = new Canvas(controller.getSprites());
+    		canvas = new Canvas(controller.getSprites(), controller.getStage());
     	}
     
     public void start() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {

@@ -8,8 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.jatch.script.vars.Value;
-
 public class Controller implements KeyListener, MouseListener {
 	private final List<Thread> threads;
 	private final List<Sprite> sprites;
@@ -49,7 +47,7 @@ public class Controller implements KeyListener, MouseListener {
 		for (Sprite s: sprites) run(s.whenBackdropSwitches(newbn), s);
 	}
 	
-	public void whenAttrGreater(String attr, Value val) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+	public void whenAttrGreater(String attr, Object val) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		for (Sprite s: sprites) run(s.whenFlagClicked(), s);
 	}
 
@@ -71,16 +69,7 @@ public class Controller implements KeyListener, MouseListener {
 		/*
 		try {
 			whenKeyPressed(KeyEvent.getKeyText(e.getKeyCode()));
-		} catch (NoSuchMethodException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		} catch (Exception e1) { }
 		*/
 	}
 
@@ -88,16 +77,7 @@ public class Controller implements KeyListener, MouseListener {
 	public void keyPressed(KeyEvent e) {
 		try {
 			whenKeyPressed(KeyEvent.getKeyText(e.getKeyCode()));
-		} catch (NoSuchMethodException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		} catch (Exception e1) { }
 	}
 
 	@Override
@@ -105,33 +85,12 @@ public class Controller implements KeyListener, MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		mouseDown = true;
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		mouseDown = true;
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		mouseDown = false;
-	}
-
-	@Override
+	public void mouseClicked(MouseEvent e) { mouseDown = true; }
+	public void mousePressed(MouseEvent e) { mouseDown = true; }
+	public void mouseReleased(MouseEvent e) { mouseDown = false; }
 	public void mouseEntered(MouseEvent e) { }
-
-	@Override
 	public void mouseExited(MouseEvent e) { }
-	
-	public List<Thread> getThreads() {
-		return threads;
-	}
-
-	public List<Sprite> getSprites() {
-		return sprites;
-	}
+	public List<Thread> getThreads() { return threads; }
+	public List<Sprite> getSprites() { return sprites; }
+	public Stage getStage() { return stage; }
 }

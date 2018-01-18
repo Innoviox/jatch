@@ -1,5 +1,6 @@
 package main.java.jatch.files;
 
+import java.awt.Image;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -58,6 +59,16 @@ public class Reader {
 		for (Object o: scripts) {
 			
 		}
+		return null;
+	}
+
+	public static Image getImageFile(String backdrop) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public static Image getSoundFile(String backdrop) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
