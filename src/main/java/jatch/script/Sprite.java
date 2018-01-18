@@ -368,4 +368,8 @@ public abstract class Sprite implements MouseListener {
 	public void setFti(boolean fti) {
 		this.fti = fti;
 	}
+
+	public void setLayer(int layer) {
+		this.layer = layer;
+	}
 }

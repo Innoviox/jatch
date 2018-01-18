@@ -36,42 +36,56 @@ public class Canvas extends JFrame {
 		// TODO: Implement layering & hiding
 		
 		Graphics b = bi.getGraphics();
-
 		b.setColor(Color.black);
-
 		b.fillRect(0,0,MAXWIDTH,MAXHEIGHT);
-		
 		g.drawImage(stage.getImage(), 0, 0, MAXWIDTH, MAXHEIGHT, new Color(0, 0, 0), null);
 		
 		List<Sprite> layered = new ArrayList<Sprite>();
 		List<Sprite> fronts = new ArrayList<Sprite>();
 		List<Sprite> backs = new ArrayList<Sprite>();
+		List<Sprite> mids = new ArrayList<Sprite>();
 		
+		List<List<Sprite>> total = new ArrayList<List<Sprite>>();
 		for (Sprite p: objects) {
 			if (p.draw()) {
-				/*
-				if (p.fti()) fronts.add(p);
-				else if (p.bti()) backs.add(p);
-				else */ layered.add(p);
+				if (p.fti()) add(fronts, p);
+				else if (p.bti()) add(backs, p);
+				else add(mids, p);
 			}
 		}
 		
-		/*
-		for (Sprite p: fronts) {
-			if ()
+		total.add(fronts);
+		total.add(backs);
+		total.add(mids);
+		
+		int currLayer = 0;
+		for (List<Sprite> l: total) {
+			for (Sprite s: l) {
+				s.setLayer(currLayer++);
+				layered.add(s);
+			}
 		}
-		for (Sprite p: objects) {
+			
+		for (Sprite p: layered) {
 			p.setFti(false);
 			p.setBti(false);
 		}
-		*/
 		
-		for (Sprite p : layered)
-			paint(p, g);
+		
+		for (Sprite p : layered) paint(p, g);
 
 		g = this.getGraphics();
-
 		g.drawImage(bi, 0, 0, null);
+	}
+
+	private void add(List<Sprite> fronts, Sprite p) {
+		int pos = 0;
+		int layer = p.getLayer();
+		for (Sprite s: fronts) {
+			if (s.getLayer() > layer) break;
+			pos++;
+		}
+		fronts.add(pos, p);
 	}
 
 	private void paint(Sprite p, Graphics g) {		
