@@ -62,12 +62,12 @@ public class Reader {
 		return null;
 	}
 
-	public static Image getImageFile(String backdrop) {
+	public static Image getImageFile(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public static Image getSoundFile(String backdrop) {
+	public static Image getSoundFile(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -7,6 +7,7 @@ import main.java.jatch.script.Stage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Canvas extends JFrame {
@@ -32,22 +33,48 @@ public class Canvas extends JFrame {
 	}
 
 	public void paint(Graphics g) {
-			Graphics b = bi.getGraphics();
+		// TODO: Implement layering & hiding
+		
+		Graphics b = bi.getGraphics();
 
-			b.setColor(Color.black);
+		b.setColor(Color.black);
 
-			b.fillRect(0,0,MAXWIDTH,MAXHEIGHT);
+		b.fillRect(0,0,MAXWIDTH,MAXHEIGHT);
+		
+		g.drawImage(stage.getImage(), 0, 0, MAXWIDTH, MAXHEIGHT, new Color(0, 0, 0), null);
+		
+		List<Sprite> layered = new ArrayList<Sprite>();
+		List<Sprite> fronts = new ArrayList<Sprite>();
+		List<Sprite> backs = new ArrayList<Sprite>();
+		
+		for (Sprite p: objects) {
+			if (p.draw()) {
+				/*
+				if (p.fti()) fronts.add(p);
+				else if (p.bti()) backs.add(p);
+				else */ layered.add(p);
+			}
+		}
+		
+		/*
+		for (Sprite p: fronts) {
+			if ()
+		}
+		for (Sprite p: objects) {
+			p.setFti(false);
+			p.setBti(false);
+		}
+		*/
+		
+		for (Sprite p : layered)
+			paint(p, g);
 
-			for (Sprite p : objects)
-				paint(p, g);
+		g = this.getGraphics();
 
-			g = this.getGraphics();
-
-			g.drawImage(bi, 0, 0, null);
+		g.drawImage(bi, 0, 0, null);
 	}
 
-	private void paint(Sprite p, Graphics g) {
-		g.drawImage(stage.getImage(), 0, 0, MAXWIDTH, MAXHEIGHT, new Color(0, 0, 0), null);
+	private void paint(Sprite p, Graphics g) {		
 		g.drawImage(p.getImage(), (int)p.getXPos(), (int)p.getYPos(), null);
 	}
 }

@@ -5,7 +5,9 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
+import java.util.Map;
 
+import main.java.jatch.files.Reader;
 import main.java.jatch.script.vars.ListShower;
 import main.java.jatch.script.vars.VarShower;
 
@@ -21,7 +23,11 @@ public abstract class Sprite implements MouseListener {
 	private Controller controller;
 	private boolean touchingPtr;
 	private Image img;
+	private Map<String, Double> effects;
 	/* public Map<String, Variable> vars = new HashMap(); */
+	private boolean draw;
+	private int layer;
+	private boolean bti = false, fti = false;
 	
 	// Motion
 	public void move(double steps) {
@@ -115,27 +121,74 @@ public abstract class Sprite implements MouseListener {
 	void showDir() {VarShower.show(dir, "dir"); }
 	
 	// Looks
-	void say(String s, double secs){}
-	void say(String s){}
-	void think(String s, double secs){}
-	void think(String s){}
+	public void say(String s, double secs) throws InterruptedException {
+		say(s);
+		Thread.sleep((long) secs);
+	}
 	
-	void show(){}
-	void hide(){}
+	public void say(String s) {
+		//TODO: Implement Say graphics
+	}
 	
-	void switchCostume(String nc){}
-	void nextCostume(){}
-	void switchBackdrop(String nb){}
+	public void think(String s, double secs) throws InterruptedException {
+		think(s);
+		Thread.sleep((long) secs);
+	}
 	
-	void changeEffect(String effect, double n){}
-	void setEffect(String effect, double n){}
-	void clearGraphics(){}
+	public void think(String s) {
+		//TODO: Implement Think graphics
+	}
 	
-	void changeSize(double ds){}
-	void setSize(double ns){}
+	public void show() {
+		draw = true;
+	}
 	
-	void front(){}
-	void back(double n){}
+	public void hide() {
+		draw = false;
+	}
+	
+	public void switchCostume(String nc) {
+		costumeN = nc;
+		img = Reader.getImageFile(nc);
+	}
+	
+	public void nextCostume() {
+		switchCostume((Integer.parseInt(costumeN) + 1)+"");
+	}
+	
+	public void switchBackdrop(String nb) {
+		controller.getStage().setBackdrop(nb);
+	}
+	
+	public void changeEffect(String effect, double n) {
+		// TODO: Implement effects
+	}
+	
+	public void setEffect(String effect, double n) {
+		//TODO: Implement effects
+	}
+	
+	public void clearGraphics() {
+		effects.clear();
+	}
+	
+	public void changeSize(double ds) {
+		size += ds;
+	}
+	
+	public void setSize(double ns) {
+		size = ns;
+	}
+	
+	public void front() {
+		layer = 0;
+		setFti(true);
+	}
+	
+	public void back(double n) {
+		layer = -1;
+		setBti(true);
+	}
 	
 	void showCostumeN() { VarShower.show(costumeN, "costumeN"); }
 	void showBackName() { VarShower.show(backName, "backName"); }
@@ -296,5 +349,23 @@ public abstract class Sprite implements MouseListener {
 	}
 	public double getYPos() {
 		return yPos;
+	}
+	public boolean draw() { return draw; }
+	public int getLayer() { return layer; }
+
+	public boolean bti() {
+		return bti;
+	}
+
+	public void setBti(boolean bti) {
+		this.bti = bti;
+	}
+
+	public boolean fti() {
+		return fti;
+	}
+
+	public void setFti(boolean fti) {
+		this.fti = fti;
 	}
 }
