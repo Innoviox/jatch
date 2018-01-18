@@ -6,7 +6,6 @@ import main.java.jatch.script.Sprite;
 import main.java.jatch.script.vars.Value;
 
 public class Test extends Sprite {
-	@Override
 	public List<Script> whenFlagClicked() {
 		// TODO Auto-generated method stub
 		return null;

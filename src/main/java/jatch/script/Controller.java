@@ -11,13 +11,18 @@ import java.util.List;
 import main.java.jatch.script.vars.Value;
 
 public class Controller implements KeyListener, MouseListener {
-	private List<Thread> threads;
-	private List<Sprite> sprites;
+	private final List<Thread> threads;
+	private final List<Sprite> sprites;
+	private String oldBackdrop;
+	private Stage stage;
 	private boolean mouseDown;
 	
-	public Controller(List<Sprite> sprites) {
+	public Controller(List<Sprite> sprites, Stage stage) {
 		threads = new ArrayList<Thread>();
 		this.sprites = sprites;
+		this.stage = stage;
+		mouseDown = false;
+		oldBackdrop = stage.getBackdrop();
 	}
 	
 	public void run(List<Script> scripts, Sprite sprite) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -48,6 +53,19 @@ public class Controller implements KeyListener, MouseListener {
 		for (Sprite s: sprites) run(s.whenFlagClicked(), s);
 	}
 
+	public void update() {
+		String newbn = stage.getBackdrop();
+		if (!oldBackdrop.equals(newbn)) {
+			oldBackdrop = newbn;
+			try {
+				whenBackdropSwitches(newbn);
+			} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		/*
@@ -108,4 +126,12 @@ public class Controller implements KeyListener, MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) { }
+	
+	public List<Thread> getThreads() {
+		return threads;
+	}
+
+	public List<Sprite> getSprites() {
+		return sprites;
+	}
 }
