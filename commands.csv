@@ -1,0 +1,24 @@
+whenGreenFlag,public void whenFlagClicked() {
+whenKeyPressed,public void whenKeyPressed(String key) {
+whenClicked,public void whenClicked() {
+whenSceneStarts,public void whenBackdropSwitches(String newbn) {
+whenSensorGreaterThan,"public void whenAttrGreater(String attr, Object value)) {"
+whenIReceive,public void whenIRecieve(String msg) {
+broadcast:,"broadcast(""%s"");"
+doBroadcastAndWait,"broadcastWait(""%s"");"
+wait:elapsed:from:,wait(%f);
+doForever,CONTROL
+doRepeat,CONTROL
+doIf,CONTROL
+doIfElse,CONTROL
+doWaitUntil,waitUntil(%s);
+doUntil,CONTROL
+stopScripts,stop(%s);
+whenCloned,public void whenCloned() {
+createCloneOf,clone(%s);
+deleteClone,deleteClone();
+touching:,"tempString = ""%s""; if(tempString .equals(""_mouse_"")) { touchingPtr(); } else { touching(tempString); }"
+touchingColor:,touchingColor(%f);
+color:sees:,"colorTouchingColor(%f, %f)"
+DUMMY,DUMMY
+forward:,move(%s)

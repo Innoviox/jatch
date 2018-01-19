@@ -1,8 +1,12 @@
 package main.java.jatch.files;
 
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,6 +20,21 @@ import main.java.com.cedarsoftware.util.io.JsonReader;
 import main.java.jatch.script.Script;
 
 public class Reader {
+	private final Map<String, String> cmds = new HashMap<String, String>();;
+	
+	public Reader() {
+        String line = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(new File("commands.csv")))) {
+            while ((line = br.readLine()) != null) {
+                String[] cmd = line.split(",");
+                cmds.put(cmd[0], cmd[1]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+	
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object[]> read(String filename) throws IOException {
 		String json = new String(Files.readAllBytes(Paths.get(filename)), StandardCharsets.UTF_8);
@@ -45,22 +64,33 @@ public class Reader {
 				for (int i = 1; i < script.length; i++) inputs.add(script[i]);
 				extracted.add(new Script(cmd, inputs));
 			}
+			extracted.add(new Script("DUMMY", new ArrayList<Object>()));
 		}
 		
 		return extracted;
 	}
 	
-	public static String getJavaFunction(String scratchMethod) {
-		return null;
+	public String getJavaFunction(String scratchMethod) {
+		return cmds.get(
+				scratchMethod);
 	}
 	
-	public List<String> scriptToJava(Map child) {
-		Object[] scripts = (Object[]) child.get("scripts");
-		List<String> javas = new ArrayList<String>();
-		for (Object o: scripts) {
-			
+	public String scriptToJava(Map<String, Object> child) {
+		List<Script> scripts = extractScripts(child);
+		String java = "";
+		for (Script s: scripts) {			
+			if (s.cmd.equals("DUMMY")) java += "}\n";
+			else { 
+				String cmd = s.cmd;
+				try {
+					java += String.format(cmd, s.args) + "\n";
+				} catch(NullPointerException e) {
+					java += cmd + "\n";
+				}
+			}
 		}
-		return null;
+			
+		return java;
 	}
 
 	public static Image getImageFile(String name) {
