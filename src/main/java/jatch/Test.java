@@ -6,37 +6,43 @@ import main.java.jatch.script.Sprite;
 import main.java.jatch.script.vars.Value;
 
 public class Test extends Sprite {
-	public List<Script> whenFlagClicked() {
+	public void whenFlagClicked() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Script> whenKeyPressed(String key) {
+	public void whenKeyPressed(String key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Script> whenClicked() {
+	public void whenClicked() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Script> whenBackdropSwitches(String newbn) {
+	public void whenBackdropSwitches(String newbn) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Script> whenAttrGreater(String attr, Value val) {
+	public void whenAttrGreater(String attr, Value val) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Script> whenIRecieve(String msg) {
+	public void whenIRecieve(String msg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void whenCloned() {
 		// TODO Auto-generated method stub
 		return null;
 	}
