@@ -4,6 +4,7 @@ public class Operators {
 	private String op, v1, v2;
 	private boolean arith, comp, bool, not;
 	private String result;
+	
 	public Operators(String[] cond) {
 		op = cond[0];
 		arith = op.equals("+") || op.equals("-") || op.equals("*") || op.equals("/");
@@ -12,7 +13,6 @@ public class Operators {
 		not = op.equals("not");
 		v1 = cond[1];
 		if (!not) v2 = cond[2];
-
 	}
 	
 	public String parse() {

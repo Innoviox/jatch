@@ -6,7 +6,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import main.java.jatch.graphics.DrawController;
 
@@ -16,6 +18,7 @@ public class Controller implements KeyListener, MouseListener {
 	private String oldBackdrop;
 	private Stage stage;
 	private boolean mouseDown;
+	private static final Map<String, Boolean> keys = new HashMap<String, Boolean>();
 	
 	public Controller(List<Sprite> sprites, Stage stage) {
 		threads = new ArrayList<Thread>();
@@ -23,14 +26,6 @@ public class Controller implements KeyListener, MouseListener {
 		this.stage = stage;
 		mouseDown = false;
 		oldBackdrop = stage.getBackdrop();
-	}
-	
-	public void run(List<Script> scripts, Sprite sprite) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		Thread t = new Thread() {{
-			for (Script script: scripts) script.call(sprite);
-		}};
-		threads.add(t);
-		t.run();
 	}
 	
 	public void broadcast(String msg) {
@@ -74,6 +69,7 @@ public class Controller implements KeyListener, MouseListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		try {
+			keys.put(KeyEvent.getKeyText(e.getKeyCode()), true);
 			whenKeyPressed(KeyEvent.getKeyText(e.getKeyCode()));
 		} catch (Exception e1) { }
 	}
@@ -81,7 +77,12 @@ public class Controller implements KeyListener, MouseListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+		keys.put(KeyEvent.getKeyText(e.getKeyCode()), false);
+	}
+	
+	public boolean keyDown(String k) {
+		Boolean b = keys.get(k);
+		return b==null?false:b;
 	}
 	public void mouseClicked(MouseEvent e) { mouseDown = true; }
 	public void mousePressed(MouseEvent e) { mouseDown = true; }
