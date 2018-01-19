@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +46,18 @@ public abstract class Sprite implements MouseListener {
 	private int instrument;
 	private int penSize;
 	private boolean clone;
+	
+	private Synthesizer midiSynth;
+	private Instrument[] instr;
+	private MidiChannel[] mChannels;
+	
+	public void initialize() throws MidiUnavailableException {
+        midiSynth = MidiSystem.getSynthesizer(); 
+        midiSynth.open();
+
+        //get and load default instrument and channel lists
+        instr = midiSynth.getDefaultSoundbank().getInstruments();
+	}
 	
 	// Motion
 	public void move(double steps) {
@@ -234,30 +245,12 @@ public abstract class Sprite implements MouseListener {
 	void rest(double beats){}
 	
 	public void playNote(int note, double beats) {
-	      try{
-	          /* Create a new Sythesizer and open it. Most of 
-	           * the methods you will want to use to expand on this 
-	           * example can be found in the Java documentation here: 
-	           * https://docs.oracle.com/javase/7/docs/api/javax/sound/midi/Synthesizer.html
-	           */
-	    	  	  // TODO: Move to constructor (initializer function bc abstract)
-	          Synthesizer midiSynth = MidiSystem.getSynthesizer(); 
-	          midiSynth.open();
-
-	          //get and load default instrument and channel lists
-	          Instrument[] instr = midiSynth.getDefaultSoundbank().getInstruments();
-	          MidiChannel[] mChannels = midiSynth.getChannels();
-
-	          midiSynth.loadInstrument(instr[instrument]);//load an instrument
-
-
-	          mChannels[0].noteOn(note, (int)vol);//On channel 0, play note number 60 with velocity 100 
-	          try { Thread.sleep((long)beats); // wait time in milliseconds to control duration
-	          } catch( InterruptedException e ) { }
-	          mChannels[0].noteOff(note);//turn of the note
-
-
-	        } catch (MidiUnavailableException e) {}
+		mChannels = midiSynth.getChannels();	
+		midiSynth.loadInstrument(instr[instrument]);//load an instrument
+		mChannels[0].noteOn(note, (int)vol);//On channel 0, play note number 60 with velocity 100 
+		try { Thread.sleep((long)beats); // wait time in milliseconds to control duration
+		} catch( InterruptedException e ) { }
+		mChannels[0].noteOff(note);//turn of the note
 	}
 	
 	public void setInstr(int instr) {
@@ -450,7 +443,7 @@ public abstract class Sprite implements MouseListener {
 	public abstract void whenBackdropSwitches(String newbn);
 	public abstract void whenAttrGreater(String attr, Object val);
 	public abstract void whenIRecieve(String msg);
-	
+	public abstract void whenCloned();
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
