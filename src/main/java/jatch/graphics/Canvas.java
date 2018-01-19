@@ -10,13 +10,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Canvas extends JFrame {
+import TurtleGraphics.*;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -412864872409712349L;
-	
+public class Canvas extends SketchPadWindow {
 	public static final int MAXWIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	public static final int MAXHEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
@@ -26,7 +22,7 @@ public class Canvas extends JFrame {
 	BufferedImage bi = new BufferedImage(MAXWIDTH, MAXHEIGHT, BufferedImage.TYPE_INT_RGB);
 
 	public Canvas(List<Sprite> objects, Stage stage) {
-		this.setSize(MAXWIDTH, MAXHEIGHT);
+		super(MAXWIDTH, MAXHEIGHT);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.objects = objects;
 		this.stage = stage;
