@@ -1,6 +1,7 @@
 package main.java.jatch.files;
 
 import java.awt.Image;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -67,7 +68,7 @@ public class Reader {
 		return null;
 	}
 	
-	public static Image getSoundFile(String name) {
+	public static FileInputStream getSoundFile(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}

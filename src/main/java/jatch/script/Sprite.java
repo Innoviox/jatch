@@ -4,12 +4,23 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+
+import javax.sound.midi.Instrument;
+import javax.sound.midi.MidiChannel;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Synthesizer;
 
 import main.java.jatch.files.Reader;
 import main.java.jatch.script.vars.ListShower;
 import main.java.jatch.script.vars.VarShower;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 public abstract class Sprite implements MouseListener {
 	// Variables
@@ -20,14 +31,17 @@ public abstract class Sprite implements MouseListener {
 	public double xPos, yPos, dir, size, vol, tempo, loudness, timer;
 	public String costumeN, backName,  answer, rotStyle;
 	private Thread thread;
+	private List<Thread> soundThreads;
 	private Controller controller;
 	private boolean touchingPtr;
+	
 	private Image img;
 	private Map<String, Double> effects;
 	/* public Map<String, Variable> vars = new HashMap(); */
 	private boolean draw;
 	private int layer;
 	private boolean bti = false, fti = false;
+	private int instrument;
 	
 	// Motion
 	public void move(double steps) {
@@ -195,23 +209,63 @@ public abstract class Sprite implements MouseListener {
 	void showSize() { VarShower.show(size, "size"); }
 	
 	// Sound
-	void playSound(String s){}
-	void playSoundUntilDone(String s){}
-	void stopSound(){}
+	public void playSound(String s) throws IOException {
+	    Thread st = new Thread() {{ // Delegate operation to another thread
+	    		playSoundUntilDone(s);
+	    }};
+	    st.start();
+	    soundThreads.add(st);
+	}
+	
+	public void playSoundUntilDone(String s) throws IOException {
+		AudioPlayer.player.start(new AudioStream(Reader.getSoundFile(s)));
+	}
+	
+	public void stopSound() {
+		for (Thread t: soundThreads) t.interrupt();
+	}
 	
 	void playDrum(int drum, double beats){}
 	void rest(double beats){}
 	
-	void playNote(int note, double beats){}
-	void setInstr(int instr){}
+	public void playNote(int note, double beats) {
+	      try{
+	          /* Create a new Sythesizer and open it. Most of 
+	           * the methods you will want to use to expand on this 
+	           * example can be found in the Java documentation here: 
+	           * https://docs.oracle.com/javase/7/docs/api/javax/sound/midi/Synthesizer.html
+	           */
+	    	  	  // TODO: Move to constructor (initializer function bc abstract)
+	          Synthesizer midiSynth = MidiSystem.getSynthesizer(); 
+	          midiSynth.open();
+
+	          //get and load default instrument and channel lists
+	          Instrument[] instr = midiSynth.getDefaultSoundbank().getInstruments();
+	          MidiChannel[] mChannels = midiSynth.getChannels();
+
+	          midiSynth.loadInstrument(instr[instrument]);//load an instrument
+
+
+	          mChannels[0].noteOn(note, (int)vol);//On channel 0, play note number 60 with velocity 100 
+	          try { Thread.sleep((long)beats); // wait time in milliseconds to control duration
+	          } catch( InterruptedException e ) { }
+	          mChannels[0].noteOff(note);//turn of the note
+
+
+	        } catch (MidiUnavailableException e) {}
+	}
 	
-	void changeVol(int dv){}
-	void setVol(int nv){}
-	void showVol() { VarShower.show(vol, "vol"); }
+	public void setInstr(int instr) {
+		instrument = instr;
+	}
 	
-	void changeTempo(int dt){}
-	void setTempo(int nt){}
-	void showTempo() { VarShower.show(tempo, "tempo"); }
+	public void changeVol(int dv) { vol += dv; }
+	public void setVol(int nv) { vol = nv; }
+	public void showVol() { VarShower.show(vol, "vol"); }
+	
+	public void changeTempo(int dt) { tempo += dt; }
+	public void setTempo(int nt) { tempo = nt; }
+	public void showTempo() { VarShower.show(tempo, "tempo"); }
 	
 	// Pen
 	void clear(){}
