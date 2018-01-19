@@ -33,37 +33,33 @@ public class Controller implements KeyListener, MouseListener {
 		t.run();
 	}
 	
-	public void broadcast(String msg) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		for (Sprite s: sprites) run(s.whenIRecieve(msg), s);
+	public void broadcast(String msg) {
+		for (Sprite s: sprites) s.whenIRecieve(msg);
 	}
 	
-	public void whenFlagClicked() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		for (Sprite s: sprites) run(s.whenFlagClicked(), s);
+	public void whenFlagClicked() {
+		for (Sprite s: sprites) s.whenFlagClicked();
 	}
 	
-	public void whenKeyPressed(String key) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		for (Sprite s: sprites) run(s.whenKeyPressed(key), s);
+	public void whenKeyPressed(String key) {
+		for (Sprite s: sprites) s.whenKeyPressed(key);
 	}
 	
-	public void whenBackdropSwitches(String newbn) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		for (Sprite s: sprites) run(s.whenBackdropSwitches(newbn), s);
+	public void whenBackdropSwitches(String newbn) {
+		for (Sprite s: sprites) s.whenBackdropSwitches(newbn);
 	}
 	
-	public void whenAttrGreater(String attr, Object val) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		for (Sprite s: sprites) run(s.whenFlagClicked(), s);
+	public void whenAttrGreater(String attr, Object val) {
+		for (Sprite s: sprites) s.whenFlagClicked();
 	}
 
 	public void update() {
 		String newbn = stage.getBackdrop();
 		if (!oldBackdrop.equals(newbn)) {
 			oldBackdrop = newbn;
-			try {
-				whenBackdropSwitches(newbn);
-			} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			whenBackdropSwitches(newbn);
 		}
+		// TODO: Check for attrGreater
 	}
 	
 	@Override

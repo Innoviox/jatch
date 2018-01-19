@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,7 @@ public abstract class Sprite implements MouseListener {
 	private boolean bti = false, fti = false;
 	private int instrument;
 	private int penSize;
+	private boolean clone;
 	
 	// Motion
 	public void move(double steps) {
@@ -375,8 +377,13 @@ public abstract class Sprite implements MouseListener {
 	
 	private List<Object> get(String list) { return lists.get(list); }
 	// Events
-	void broadcast(String msg){}
-	void broadcastWait(String msg){}
+	public void broadcast(String msg) {
+		controller.broadcast(msg);
+	}
+	
+	public void broadcastWait(String msg) {
+		controller.broadcast(msg);
+	}
 	
 	// Control
 	void wait(double secs) throws InterruptedException {
@@ -393,12 +400,16 @@ public abstract class Sprite implements MouseListener {
 	}
 	*/
 	
-	void clone(Sprite thing) {
-		
+	public void clone(Sprite thing) {
+		controller.getSprites().add(thing.clone());
 	}
 	
-	void deleteClone() {
-		
+	public Sprite clone() {
+		return null;
+	}
+	
+	public void deleteClone() {
+		if (this.clone) controller.getSprites().remove(this);
 	}
 	
 	// Sensing
@@ -433,12 +444,12 @@ public abstract class Sprite implements MouseListener {
 	String username() { return ""; }
 	
 	// Hooks
-	public abstract List<Script> whenFlagClicked();
-	public abstract List<Script> whenKeyPressed(String key);
-	public abstract List<Script> whenClicked();
-	public abstract List<Script> whenBackdropSwitches(String newbn);
-	public abstract List<Script> whenAttrGreater(String attr, Object val);
-	public abstract List<Script> whenIRecieve(String msg);
+	public abstract void whenFlagClicked();
+	public abstract void whenKeyPressed(String key);
+	public abstract void whenClicked();
+	public abstract void whenBackdropSwitches(String newbn);
+	public abstract void whenAttrGreater(String attr, Object val);
+	public abstract void whenIRecieve(String msg);
 	
 
 	@Override
