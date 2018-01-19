@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +21,8 @@ import main.java.jatch.script.vars.VarShower;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
+import TurtleGraphics.*;
+
 public abstract class Sprite implements MouseListener {
 	// Variables
 	/*
@@ -36,7 +36,6 @@ public abstract class Sprite implements MouseListener {
 	private List<Thread> soundThreads;
 	private Controller controller;
 	private boolean touchingPtr;
-	
 	private Image img;
 	private Map<String, Double> effects;
 	/* public Map<String, Variable> vars = new HashMap(); */
@@ -350,7 +349,7 @@ public abstract class Sprite implements MouseListener {
 	
 	// Control
 	void wait(double secs) throws InterruptedException {
-		thread.sleep((long) secs);
+		Thread.sleep((long) secs);
 	}
 	
 	void waitUntil(boolean cond) {
