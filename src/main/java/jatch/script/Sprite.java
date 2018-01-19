@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public abstract class Sprite implements MouseListener {
 	*/
 	public double xPos, yPos, dir, size, vol, tempo, loudness, timer;
 	public String costumeN, backName,  answer, rotStyle;
+	private Map<String, List<Object>> lists;
 	private Thread thread;
 	private List<Thread> soundThreads;
 	private Controller controller;
@@ -153,11 +155,11 @@ public abstract class Sprite implements MouseListener {
 		//TODO: Implement Think graphics
 	}
 	
-	public void show() {
+	public void showSelf() {
 		draw = true;
 	}
 	
-	public void hide() {
+	public void hideSelf() {
 		draw = false;
 	}
 	
@@ -286,25 +288,62 @@ public abstract class Sprite implements MouseListener {
 	void setSize(int ns){}
 	
 	// Data
-	void set(VarShower var, Object nv){}
-	void change(VarShower var, Object dv){}
-	void show(VarShower var){}
-	void hide(VarShower var){}
-	
-	void add(Object item, List list){}
-	void delete(int idx, List list){}
-	void insert(Object item, int idx, List list){}
-	void replace(int idx, List list, Object item){}
-	Object item(int idx, List list) {
-		return list.get(idx);
+	public void set(String var, Object nv) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		field(var).set(this, nv);
 	}
-	int length(List list) { return list.size(); }
-	boolean contains(List list, Object item) {
-		return list.contains(item);
-	}
-	void show(List list){}
-	void hide(List list){}
 	
+	public void change(String var, double dv) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field f = field(var);
+		f.set(this, (double)f.get(this) + dv);
+	}
+	
+	public void showVar(String var) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		VarShower.show(fieldget(var), var);
+	}
+	
+	public void hideVar(String var) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		VarShower.hide(fieldget(var), var);
+	}
+	
+	private Field field(String var) throws NoSuchFieldException, SecurityException { return this.getClass().getField(var); }
+	private Object fieldget(String var) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException { return field(var).get(this); }
+	
+	public void add(Object item, String list) {
+		get(list).add(item);
+	}
+	
+	public void delete(int idx, String list) {
+		get(list).remove(idx);
+	}
+	
+	public void insert(Object item, int idx, String list) {
+		get(list).add(idx, item);
+	}
+	
+	public void replace(int idx, String list, Object item) {
+		get(list).set(idx, item);
+	}
+	
+	public Object item(int idx, String list) {
+		return get(list).get(idx);
+	}
+	
+	public int length(String list) { 
+		return get(list).size(); 
+	}
+	
+	public boolean contains(String list, Object item) {
+		return get(list).contains(item);
+	}
+	
+	public void showList(String list) {
+		ListShower.show(get(list), list);
+	}
+	public void hideList(String list) {
+		ListShower.hide(get(list), list);
+	}
+	
+	private List<Object> get(String list) { return lists.get(list); }
 	// Events
 	void broadcast(String msg){}
 	void broadcastWait(String msg){}
