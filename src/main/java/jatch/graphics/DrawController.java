@@ -29,4 +29,6 @@ public class DrawController {
 		controller.update();
 		canvas.paint(canvas.getGraphics());
 	}
+	
+	public Canvas getCanvas() { return canvas; }
 }

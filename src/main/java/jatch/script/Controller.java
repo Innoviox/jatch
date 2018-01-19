@@ -8,6 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.jatch.graphics.DrawController;
+
 public class Controller implements KeyListener, MouseListener {
 	private final List<Thread> threads;
 	private final List<Sprite> sprites;
@@ -93,4 +95,9 @@ public class Controller implements KeyListener, MouseListener {
 	public List<Thread> getThreads() { return threads; }
 	public List<Sprite> getSprites() { return sprites; }
 	public Stage getStage() { return stage; }
+
+	public DrawController getDrawController() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

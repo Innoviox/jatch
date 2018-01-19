@@ -36,6 +36,7 @@ public abstract class Sprite implements MouseListener {
 	private List<Thread> soundThreads;
 	private Controller controller;
 	private boolean touchingPtr;
+	private Pen pen;
 	private Image img;
 	private Map<String, Double> effects;
 	/* public Map<String, Variable> vars = new HashMap(); */
@@ -43,6 +44,7 @@ public abstract class Sprite implements MouseListener {
 	private int layer;
 	private boolean bti = false, fti = false;
 	private int instrument;
+	private int penSize;
 	
 	// Motion
 	public void move(double steps) {
@@ -269,22 +271,51 @@ public abstract class Sprite implements MouseListener {
 	public void showTempo() { VarShower.show(tempo, "tempo"); }
 	
 	// Pen
-	void clear(){}
+	public void clear() {
+		// TODO: find out how to clear a canvas
+	}
 	
-	void stamp(){}
+	public void stamp() {
+		// TODO: find out how to stamp a canvas
+	}
 	
-	void down(){}
-	void up(){}
+	public void down() {
+		pen.down();
+	}
 	
-	void setColor(Color nc){}
-	void changeColor(int dc){}
-	void setColor(int nc){}
+	public void up() {
+		pen.up();
+	}
 	
-	void changeShade(int ds){}
-	void setShade(int ns){}
+	public void setColor(Color nc) {
+		pen.setColor(nc);
+	}
 	
-	void changeSize(int ds){}
-	void setSize(int ns){}
+	public void changeColor(int dc) {
+		// TODO: how to do ?
+	}
+	
+	public void setColor(int nc) {
+		// TODO: convert to Color
+	}
+	
+	public void changeShade(int ds) {
+		// TODO: what?
+	}
+	
+	public void setShade(int ns) {
+		// TODO: what?
+	}
+	
+	public void changeSize(int ds) {
+		penSize += ds;
+		setSize(penSize);
+	}
+	
+	public void setSize(int ns){
+		penSize = ns;
+		pen.setWidth(ns);
+	}
 	
 	// Data
 	public void set(String var, Object nv) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
