@@ -89,8 +89,16 @@ public class Reader {
 
 	public static String scriptsToJava(List<Script> scripts) {
 		String java = "";
+		String header = null;
+		
 		for (Script s: scripts) {			
-			if ("DUMMY".equals(s.cmd)) java += "}\n";
+			if ("DUMMY".equals(s.cmd)) {
+				java += "}\n";
+				if (header != null) {
+					java += "}\n";
+					header = null;
+				}
+			}
 			else { 
 				String cmd = s.cmd;
 				// TODO: Implement Control
@@ -109,13 +117,20 @@ public class Reader {
 							String fnJava = scriptsToJava(fn);
 							cntrl = String.format(cntrl, fnJava);
 						}
-											
+						// TODO: More casing support!			
 					}
 					java += cntrl + "\n";
 				} else {
 					try {
-						java += String.format(cmd, s.args.toArray());
-						if (!java.endsWith("{")) java += ";";
+						String add = String.format(spl[0], s.args.toArray());
+						if (!add.endsWith("{")) java += add + ";";
+						else {
+							java += add;
+							if (s.args.size() > 0) {	
+								header = String.format(spl[1], s.args.toArray());
+								java += header;
+							}
+						}
 						java += "\n";
 					} catch (NullPointerException e) {
 						java += cmd + "\n";
