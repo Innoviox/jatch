@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
+
 import main.java.com.cedarsoftware.util.io.JsonReader;
 import main.java.jatch.script.ExprEval;
 import main.java.jatch.script.Script;
@@ -77,11 +80,11 @@ public class Reader {
 				scratchMethod);
 	}
 	
-	public static String scriptToJava(Map<String, Object> child) {
+	public static String scriptToJava(Map<String, Object> child) throws FormatterException {
 		List<Script> scripts = extractScripts(child);
 		String java = String.format("public class %s extends Sprite {\n", child.get("objName"));
 		java += scriptsToJava(scripts) + "}";
-		return java;
+		return new Formatter().formatSource(java);
 	}
 
 	public static String scriptsToJava(List<Script> scripts) {
@@ -111,7 +114,9 @@ public class Reader {
 					java += cntrl + "\n";
 				} else {
 					try {
-						java += String.format(cmd, s.args.toArray()) + ";\n";
+						java += String.format(cmd, s.args.toArray());
+						if (!java.endsWith("{")) java += ";";
+						java += "\n";
 					} catch (NullPointerException e) {
 						java += cmd + "\n";
 					}
