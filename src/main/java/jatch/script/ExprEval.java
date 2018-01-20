@@ -1,11 +1,11 @@
 package main.java.jatch.script;
 
-public class Operators {
+public class ExprEval {
 	private String op, v1, v2;
 	private boolean arith, comp, bool, not;
 	private String result;
 	
-	public Operators(String[] cond) {
+	public ExprEval(String[] cond) {
 		op = cond[0];
 		arith = op.equals("+") || op.equals("-") || op.equals("*") || op.equals("/");
 		comp = op.equals(">") || op.equals("<") || op.equals("=") || op.equals(">=") || op.equals("<=");
@@ -15,6 +15,19 @@ public class Operators {
 		if (!not) v2 = cond[2];
 	}
 	
+	public ExprEval(String cond) {
+		this(_inparse(cond));
+	}
+	
+	private static String[] _inparse(String cond) {
+		String[] cnd = cond.split(", ");
+		String[] newcnd = new String[3];
+		newcnd[0] = cnd[0].substring(1, 2);
+		newcnd[1] = cnd[1];
+		newcnd[2] = cnd[2].substring(0, 1);
+		return newcnd;
+	}
+
 	public String parse() {
 		if (arith) {
 			int i1 = Integer.parseInt(v1), i2 = Integer.parseInt(v2);
@@ -42,8 +55,12 @@ public class Operators {
 	}
 	
 	public static String parse(String[] cond) {
-		return new Operators(cond).parse();
+		return new ExprEval(cond).parse();
 	}
 	
 	public String getResult() { return result; }
+	
+	public String toString() {
+		return v1 + " " + op + " " + v2 + " = " + parse();
+	}
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.com.cedarsoftware.util.io.JsonReader;
+import main.java.jatch.script.ExprEval;
 import main.java.jatch.script.Script;
 
 public class Reader {
@@ -44,6 +45,7 @@ public class Reader {
 		return data;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getChild(Map<String, Object[]> data, int child) {
 		return (Map<String, Object>) data.get("children")[child];
 	}
@@ -75,28 +77,62 @@ public class Reader {
 				scratchMethod);
 	}
 	
-	public String scriptToJava(Map<String, Object> child) {
+	public static String scriptToJava(Map<String, Object> child) {
 		List<Script> scripts = extractScripts(child);
+		String java = String.format("public class %s extends Sprite {\n", child.get("objName"));
+		java += scriptsToJava(scripts) + "}";
+		return java;
+	}
+
+	public static String scriptsToJava(List<Script> scripts) {
 		String java = "";
 		for (Script s: scripts) {			
-			if (s.cmd.equals("DUMMY")) java += "}\n";
+			if ("DUMMY".equals(s.cmd)) java += "}\n";
 			else { 
 				String cmd = s.cmd;
-				try {
-					java += String.format(cmd, s.args.toArray()) + ";\n";
-				} catch(NullPointerException e) {
-					java += cmd + "\n";
-				}
-				if (cmd.equals("CONTROL")) {
-					for (Object o: s.args) {
-						// TODO: Implement Control
+				// TODO: Implement Control
+				String[] spl = cmd.split(":");
+				if ("CONTROL".equals(spl[0])) {
+					String cntrl = spl[1];
+					for (int i = 0; i < s.args.size(); i++) {
+						Object[] o = (Object[]) s.args.get(i);
+						String n = spl[i + 2];
+						if ("EXPR".equals(n)) {
+							String add = String.format("ExprEval ee = new ExprEval(\"%s\");\n", Arrays.toString(o));
+							cntrl = String.format(cntrl, "Boolean.parseBoolean(ee.parse())", "%s");
+							java += add;
+						} else if ("FN".equals(n)) {
+							List<Script> fn = extractScripts(o);
+							String fnJava = scriptsToJava(fn);
+							cntrl = String.format(cntrl, fnJava);
+						}
+											
+					}
+					java += cntrl + "\n";
+				} else {
+					try {
+						java += String.format(cmd, s.args.toArray()) + ";\n";
+					} catch (NullPointerException e) {
+						java += cmd + "\n";
 					}
 				}
 			}
 		}
-			
 		return java;
 	}
+	public static List<Script> extractScripts(Object[] scripts) {
+		// TODO Auto-generated method stub
+		List<Script> extracted = new ArrayList<Script>();
+		for (Object _script: scripts) {
+			Object[] script = (Object[]) _script;
+			List<Object> inputs = new ArrayList<Object>();
+			String cmd = (String) script[0];
+			for (int i = 1; i < script.length; i++) inputs.add(script[i]);
+			extracted.add(new Script(cmd, inputs));
+		}		
+		return extracted;
+	}
+
 
 	public static Image getImageFile(String name) {
 		// TODO Auto-generated method stub

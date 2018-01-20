@@ -9,7 +9,7 @@ doBroadcastAndWait,"broadcastWait(""%s"");"
 wait:elapsed:from:,wait(%f);
 doForever,CONTROL
 doRepeat,CONTROL
-doIf,CONTROL
+doIf,CONTROL:if(%s) { %s }:EXPR:FN
 doIfElse,CONTROL
 doWaitUntil,waitUntil(%s);
 doUntil,CONTROL
@@ -22,3 +22,5 @@ touchingColor:,touchingColor(%f);
 color:sees:,"colorTouchingColor(%f, %f)"
 DUMMY,DUMMY
 forward:,move(%s)
+turnRight:,turnRight(%s)
+turnLeft:,turnLeft(%s)
