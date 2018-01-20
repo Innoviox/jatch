@@ -83,9 +83,14 @@ public class Reader {
 			else { 
 				String cmd = s.cmd;
 				try {
-					java += String.format(cmd, s.args) + "\n";
+					java += String.format(cmd, s.args.toArray()) + ";\n";
 				} catch(NullPointerException e) {
 					java += cmd + "\n";
+				}
+				if (cmd.equals("CONTROL")) {
+					for (Object o: s.args) {
+						// TODO: Implement Control
+					}
 				}
 			}
 		}
