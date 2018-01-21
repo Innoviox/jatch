@@ -16,10 +16,10 @@ public class ExprEval {
 	}
 	
 	public ExprEval(String cond) {
-		this(_inparse(cond));
+		this(stringToArr(cond));
 	}
 	
-	private static String[] _inparse(String cond) {
+	private static String[] stringToArr(String cond) {
 		String[] cnd = cond.split(", ");
 		String[] newcnd = new String[3];
 		newcnd[0] = cnd[0].substring(1, 2);

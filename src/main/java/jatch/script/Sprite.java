@@ -384,7 +384,7 @@ public abstract class Sprite implements MouseListener {
 	}
 	
 	void waitUntil(boolean cond) {
-		while (!cond) {};
+		while (!cond) {}
 	}
 	
 	/*

@@ -18,13 +18,13 @@ import java.util.Map;
 
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
+import com.cedarsoftware.util.io.JsonReader;
 
-import main.java.com.cedarsoftware.util.io.JsonReader;
 import main.java.jatch.script.ExprEval;
 import main.java.jatch.script.Script;
 
 public class Reader {
-	private final Map<String, String> cmds = new HashMap<String, String>();;
+	private static final Map<String, String> cmds = new HashMap<String, String>();;
 	
 	public Reader() {
         String line = "";
@@ -38,6 +38,9 @@ public class Reader {
         }
     }
 
+	public static Reader init() {
+		return new Reader();
+	}
 	
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object[]> read(String filename) throws IOException {
@@ -53,6 +56,9 @@ public class Reader {
 		return (Map<String, Object>) data.get("children")[child];
 	}
 	
+	public static Map<String, Object> getChild(String fn, int child) throws IOException {
+		return getChild(read(fn), child);
+	}
 	public static Object[] getScripts(Map<String, Object> child) {
 		return (Object[]) child.get("scripts");
 	}
@@ -140,8 +146,8 @@ public class Reader {
 		}
 		return java;
 	}
+	
 	public static List<Script> extractScripts(Object[] scripts) {
-		// TODO Auto-generated method stub
 		List<Script> extracted = new ArrayList<Script>();
 		for (Object _script: scripts) {
 			Object[] script = (Object[]) _script;
