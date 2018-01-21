@@ -7,17 +7,17 @@ whenIReceive,public void whenIRecieve(String msg) {:if ("%s".equals(msg)) {
 broadcast:,"broadcast(""%s"");"
 doBroadcastAndWait,"broadcastWait(""%s"");"
 wait:elapsed:from:,wait(%f);
-doForever,CONTROL
+doForever,CONTROL:while (true) { %s }:FN
 doRepeat,CONTROL
-doIf,CONTROL:if(%s) { %s }:EXPR:FN
-doIfElse,CONTROL
+doIf,CONTROL:if(tempBool) { %s }:EXPR:FN
+doIfElse,CONTROL:if(tempBool) { %s } else { %s}:EXPR:FN:FN
 doWaitUntil,waitUntil(%s);
 doUntil,CONTROL
 stopScripts,stop(%s);
 whenCloned,public void whenCloned() {
 createCloneOf,clone(%s);
 deleteClone,deleteClone();
-touching:,"tempString = ""%s""; if(tempString .equals(""_mouse_"")) { touchingPtr(); } else { touching(tempString); }"
+touching:,tempString = "%s"; if(tempString.equals("_mouse_")) { tempBool = touchingPtr(); } else { tempBool = touching(tempString); }
 touchingColor:,touchingColor(%f);
 color:sees:,"colorTouchingColor(%f, %f)"
 DUMMY,DUMMY

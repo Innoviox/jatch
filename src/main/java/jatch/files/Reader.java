@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingFormatArgumentException;
 
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
@@ -113,12 +114,13 @@ public class Reader {
 	public static String scriptToJava(Map<String, Object> child) throws FormatterException {
 		init();
 		List<Script> scripts = extractScripts(child);
-		String java = String.format("public class %s extends Sprite {\n", child.get("objName"));
+		String java = String.format("import main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;", child.get("objName"));
 		scriptsToJava(scripts);
 		for (String hook: hooks.keySet()) {
 			java += hooks.get(hook);
 			if (!java.endsWith("}\n")) java += "}\n";
 		}
+		System.out.println(java);
 		java += "}";
 		return new Formatter().formatSource(java);
 	}
@@ -153,13 +155,30 @@ public class Reader {
 						Object[] o = (Object[]) s.args.get(i);
 						String n = spl[i + 2];
 						if ("EXPR".equals(n)) {
-							String add = String.format("ExprEval ee = new ExprEval(\"%s\");\n", Arrays.toString(o));
-							cntrl = String.format(cntrl, "Boolean.parseBoolean(ee.parse())", "%s");
-							java += add;
+							// String add = null; //, fmt = null;
+							if (o[0].equals("touching:")) {
+								// add = String.format(getJavaFunction((String)o[0]), o[1]);
+								cntrl = String.format(getJavaFunction((String)o[0]), o[1]) + cntrl;
+							} else {
+								java += String.format("ExprEval ee = new ExprEval(\"%s\");\n", Arrays.toString(o));
+								cntrl = "tempBool = Boolean.parseBoolean(ee.parse());" + cntrl;
+							}
+							/*
+							try {
+								cntrl = String.format(cntrl, fmt, "%s");
+							} catch (MissingFormatArgumentException e) {
+								cntrl = String.format(cntrl, fmt, "%s", "%s");
+							}
+							*/
+							// java += add;
 						} else if ("FN".equals(n)) {
 							List<Script> fn = extractScripts(o);
 							String fnJava = scriptsToJava(fn);
-							cntrl = String.format(cntrl, fnJava);
+							try {
+								cntrl = String.format(cntrl, fnJava);
+							} catch (MissingFormatArgumentException e) {
+								cntrl = String.format(cntrl, fnJava, "%s");
+							}
 						}
 						// TODO: More casing support!			
 					}

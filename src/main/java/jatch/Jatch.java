@@ -9,7 +9,7 @@ import main.java.jatch.files.*;
 
 public class Jatch {
 	public static void main(String[] args) throws FormatterException, IOException {
-		Jatch.convert("test-multisprite1");
+		Jatch.convert("test-recursive3");
 	}
 	
 	public static void convert(String file) throws FormatterException, IOException {
