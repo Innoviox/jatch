@@ -19,7 +19,7 @@ public class Canvas extends SketchPadWindow {
 	private List<Sprite> objects;
 	private Stage stage;
 	
-	BufferedImage bi = new BufferedImage(MAXWIDTH, MAXHEIGHT, BufferedImage.TYPE_INT_RGB);
+	private BufferedImage bi = new BufferedImage(MAXWIDTH, MAXHEIGHT, BufferedImage.TYPE_INT_RGB);
 
 	public Canvas(List<Sprite> objects, Stage stage) {
 		super(MAXWIDTH, MAXHEIGHT);
@@ -70,8 +70,8 @@ public class Canvas extends SketchPadWindow {
 		
 		for (Sprite p : layered) paint(p, g);
 
-		g = this.getGraphics();
-		g.drawImage(bi, 0, 0, null);
+		Graphics g2 = this.getGraphics();
+		g2.drawImage(bi, 0, 0, null);
 	}
 
 	private void add(List<Sprite> fronts, Sprite p) {

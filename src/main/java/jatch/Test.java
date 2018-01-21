@@ -1,7 +1,5 @@
 package main.java.jatch;
 
-import java.util.List;
-import main.java.jatch.script.Script;
 import main.java.jatch.script.Sprite;
 
 public class Test extends Sprite {

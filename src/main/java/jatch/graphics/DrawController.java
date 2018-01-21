@@ -9,7 +9,7 @@ import main.java.jatch.script.Controller;
 
 public class DrawController {
     private Canvas canvas;
-    private Runnable update;
+    // private Runnable update;
     private Controller controller;
     
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -21,7 +21,7 @@ public class DrawController {
     
     public void start() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
     		controller.whenFlagClicked();
-        update = () -> update();
+        Runnable update = () -> update();
         scheduler.scheduleAtFixedRate(update,1,1000/60, TimeUnit.MILLISECONDS);
     }
 

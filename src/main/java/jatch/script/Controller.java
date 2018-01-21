@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,12 +86,18 @@ public class Controller implements KeyListener, MouseListener {
 	public void mouseClicked(MouseEvent e) { mouseDown = true; }
 	public void mousePressed(MouseEvent e) { mouseDown = true; }
 	public void mouseReleased(MouseEvent e) { mouseDown = false; }
+	/**
+	 * Overridden from mouseListener
+	 */
 	public void mouseEntered(MouseEvent e) { }
+	/**
+	 * Overridden from mouseListener
+	 */
 	public void mouseExited(MouseEvent e) { }
 	public List<Thread> getThreads() { return threads; }
 	public List<Sprite> getSprites() { return sprites; }
 	public Stage getStage() { return stage; }
-
+	public boolean isMouseDown() { return mouseDown; }
 	public DrawController getDrawController() {
 		// TODO Auto-generated method stub
 		return null;

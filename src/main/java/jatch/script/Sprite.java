@@ -499,4 +499,16 @@ public abstract class Sprite implements MouseListener {
 	public void setLayer(int layer) {
 		this.layer = layer;
 	}
+
+	public Thread getThread() {
+		return thread;
+	}
+
+	public void setThread(Thread thread) {
+		this.thread = thread;
+	}
+
+	public boolean isTouchingPtr() {
+		return touchingPtr;
+	}
 }
