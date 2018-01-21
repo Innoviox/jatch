@@ -2,7 +2,7 @@ whenGreenFlag,public void whenFlagClicked() {
 whenKeyPressed,public void whenKeyPressed(String key) {:if ("%s".equals(key)) {
 whenClicked,public void whenClicked() {
 whenSceneStarts,public void whenBackdropSwitches(String newbn) {
-whenSensorGreaterThan,"public void whenAttrGreater(String attr, Object value)) {"
+whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) {
 whenIReceive,public void whenIRecieve(String msg) {
 broadcast:,"broadcast(""%s"");"
 doBroadcastAndWait,"broadcastWait(""%s"");"

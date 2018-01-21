@@ -6,7 +6,7 @@ import java.util.List;
 import main.java.jatch.files.Reader;
 
 public class Script {
-	public String cmd;
+	public String cmd, ocmd;
 	public List<Object> args;
 	public boolean recursive;
 	
@@ -15,6 +15,7 @@ public class Script {
 	public Script(String cmd, List<Object> args) {
 		this.cmd = r.getJavaFunction(cmd);
 		if (this.cmd == null) this.cmd = cmd;
+		this.ocmd = cmd;
 		this.args = args;
 	}
 	

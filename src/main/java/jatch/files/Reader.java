@@ -22,9 +22,10 @@ import com.cedarsoftware.util.io.JsonReader;
 import main.java.jatch.script.Script;
 
 public class Reader {
-	private static final Map<String, String> cmds = new HashMap<String, String>();;
-	
-	public Reader() {
+	private static final Map<String, String> cmds = new HashMap<String, String>();
+	private static final Map<String, String> hooks = new HashMap<String, String>();
+
+	public static void init() {
         String line = "";
         try (BufferedReader br = new BufferedReader(new FileReader(new File("commands.csv")))) {
             while ((line = br.readLine()) != null) {
@@ -34,10 +35,17 @@ public class Reader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
 
-	public static Reader init() {
-		return new Reader();
+        String s = "whenGreenFlag,public void whenFlagClicked() {\n" + 
+        		"whenKeyPressed,public void whenKeyPressed(String key) {:if (\"%s\".equals(key)) {\n" + 
+        		"whenClicked,public void whenClicked() {\n" + 
+        		"whenSceneStarts,public void whenBackdropSwitches(String newbn) {\n" + 
+        		"whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) {\n" + 
+        		"whenIReceive,public void whenIRecieve(String msg) {";
+        for (String hook: s.split("\n")) {
+    	        String[] h = hook.split(",");
+    	        hooks.put(h[0], h[1].split(":")[0].replaceAll("/", ","));
+        }
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -79,21 +87,28 @@ public class Reader {
 		return extracted;
 	}
 	
-	public String getJavaFunction(String scratchMethod) {
+	public static String getJavaFunction(String scratchMethod) {
 		return cmds.get(
 				scratchMethod);
 	}
 	
 	public static String scriptToJava(Map<String, Object> child) throws FormatterException {
+		init();
 		List<Script> scripts = extractScripts(child);
 		String java = String.format("public class %s extends Sprite {\n", child.get("objName"));
-		java += scriptsToJava(scripts) + "}";
+		scriptsToJava(scripts);
+		for (String hook: hooks.keySet()) {
+			java += hooks.get(hook);
+			if (!java.endsWith("}\n")) java += "}\n";
+		}
+		java += "}";
 		return new Formatter().formatSource(java);
 	}
 
 	public static String scriptsToJava(List<Script> scripts) {
 		String java = "";
 		String header = null;
+		String currHook = null;
 		
 		for (Script s: scripts) {			
 			if ("DUMMY".equals(s.cmd)) {
@@ -101,6 +116,13 @@ public class Reader {
 				if (header != null) {
 					java += "}\n";
 					header = null;
+				}
+				if (currHook != null) {
+					String old = hooks.get(currHook);
+					if (old.endsWith("}\n")) old = old.substring(0, old.length() - 2);
+					hooks.put(currHook, old + java); // getJavaFunction(currHook).split(":")[0]
+					currHook = "";
+					java = "";
 				}
 			}
 			else { 
@@ -129,11 +151,12 @@ public class Reader {
 						String add = String.format(spl[0], s.args.toArray());
 						if (!add.endsWith("{")) java += add + ";";
 						else {
-							java += add;
+							// java += add;
 							if (s.args.size() > 0) {	
 								header = String.format(spl[1], s.args.toArray());
 								java += header;
 							}
+							currHook = s.ocmd;
 						}
 						java += "\n";
 					} catch (NullPointerException e) {
