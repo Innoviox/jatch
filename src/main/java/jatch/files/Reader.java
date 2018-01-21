@@ -2,10 +2,19 @@ package main.java.jatch.files;
 
 import java.awt.Image;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,6 +24,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingFormatArgumentException;
+
+import javax.tools.DiagnosticCollector;
+import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileManager;
+import javax.tools.JavaFileObject;
+import javax.tools.SimpleJavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
+import javax.tools.ToolProvider;
 
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
@@ -42,7 +62,8 @@ public class Reader {
         		"whenClicked,public void whenClicked() {\n" + 
         		"whenSceneStarts,public void whenBackdropSwitches(String newbn) {\n" + 
         		"whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) {\n" + 
-        		"whenIReceive,public void whenIRecieve(String msg) {";
+        		"whenIReceive,public void whenIRecieve(String msg) {\n" + 
+        		"whenCloned,public void whenCloned() {";
         for (String hook: s.split("\n")) {
     	        String[] h = hook.split(",");
     	        hooks.put(h[0], h[1].split(":")[0].replaceAll("/", ","));
@@ -114,7 +135,7 @@ public class Reader {
 	public static String scriptToJava(Map<String, Object> child) throws FormatterException {
 		init();
 		List<Script> scripts = extractScripts(child);
-		String java = String.format("import main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;", child.get("objName"));
+		String java = String.format("package compiled;\nimport main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;", child.get("objName"));
 		scriptsToJava(scripts);
 		for (String hook: hooks.keySet()) {
 			java += hooks.get(hook);
@@ -217,7 +238,21 @@ public class Reader {
 		return extracted;
 	}
 
+	public static void compileSource(String java) throws Exception {
+		String name = java.split("public class ")[1].split(" ")[0].trim();
+		
 
+		File f = new File("src/compiled/" + name + ".java");
+		f.getParentFile().mkdirs(); 
+		f.createNewFile();
+		
+		FileWriter fw = new FileWriter(f);
+		fw.write(java);
+		fw.flush();
+		fw.close();
+		
+    }
+	
 	public static Image getImageFile(String name) {
 		// TODO Auto-generated method stub
 		return null;

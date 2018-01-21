@@ -4,6 +4,7 @@ whenClicked,public void whenClicked() {
 whenSceneStarts,public void whenBackdropSwitches(String newbn) {
 whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) {
 whenIReceive,public void whenIRecieve(String msg) {:if ("%s".equals(msg)) {
+whenCloned,public void whenCloned() {
 broadcast:,"broadcast(""%s"");"
 doBroadcastAndWait,"broadcastWait(""%s"");"
 wait:elapsed:from:,wait(%f);
@@ -22,5 +23,5 @@ touchingColor:,touchingColor(%f);
 color:sees:,"colorTouchingColor(%f, %f)"
 DUMMY,DUMMY
 forward:,move(%s)
-turnRight:,turnRight(%s)
-turnLeft:,turnLeft(%s)
+turnRight:,turnR(%s)
+turnLeft:,turnL(%s)

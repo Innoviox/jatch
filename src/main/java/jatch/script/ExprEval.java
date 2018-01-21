@@ -1,8 +1,6 @@
 package main.java.jatch.script;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class ExprEval {
 	private String op, v1, v2;
