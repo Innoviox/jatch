@@ -65,6 +65,24 @@ public class Reader {
 	public static Map<String, Object> getChild(String fn, int child) throws IOException {
 		return getChild(read(fn), child);
 	}
+	
+	public static List<Map<String, Object>> getChildren(String fn) throws IOException {
+		return getChildren(read(fn));
+	}
+	
+	public static List<Map<String, Object>> getChildren(Map<String, Object[]> data) {
+		List<Map<String, Object>> children = new ArrayList<>();
+		int i = 0;
+		while (true) {
+			try {
+				children.add(getChild(data, i++));
+			} catch (IndexOutOfBoundsException e) {
+				break;
+			}
+		}
+		return children;
+	}
+
 	public static Object[] getScripts(Map<String, Object> child) {
 		return (Object[]) child.get("scripts");
 	}

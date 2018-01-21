@@ -3,7 +3,7 @@ whenKeyPressed,public void whenKeyPressed(String key) {:if ("%s".equals(key)) {
 whenClicked,public void whenClicked() {
 whenSceneStarts,public void whenBackdropSwitches(String newbn) {
 whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) {
-whenIReceive,public void whenIRecieve(String msg) {
+whenIReceive,public void whenIRecieve(String msg) {:if ("%s".equals(msg)) {
 broadcast:,"broadcast(""%s"");"
 doBroadcastAndWait,"broadcastWait(""%s"");"
 wait:elapsed:from:,wait(%f);
