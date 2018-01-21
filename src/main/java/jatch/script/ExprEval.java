@@ -1,9 +1,14 @@
 package main.java.jatch.script;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ExprEval {
 	private String op, v1, v2;
 	private boolean arith, comp, bool, not;
 	private String result;
+	protected int convs;
 	
 	public ExprEval(String[] cond) {
 		op = cond[0];
@@ -12,7 +17,31 @@ public class ExprEval {
 		bool = op.equals("and") || op.equals("or");
 		not = op.equals("not");
 		v1 = cond[1];
-		if (!not) v2 = cond[2];
+		int i = 1;
+		try {
+			Integer.parseInt(v1);
+		} catch (NumberFormatException e) {
+			ExprEval ee = new ExprEval(Arrays.copyOfRange(cond, i, cond.length));
+			v1 = ee.parse();
+			i += ee.convs * 2;
+			convs += ee.convs;
+			convs++;
+			i += 2;
+		}
+		i++;
+		if (!not) {
+			v2 = cond[i];
+			try {
+				Integer.parseInt(v2);
+			} catch (NumberFormatException e) {
+				ExprEval ee = new ExprEval(Arrays.copyOfRange(cond, i, cond.length));
+				v2 = ee.parse();
+				i += ee.convs * 2;
+				convs += ee.convs;
+				convs++;
+				i += 2;
+			}
+		}
 	}
 	
 	public ExprEval(String cond) {
@@ -20,12 +49,7 @@ public class ExprEval {
 	}
 	
 	private static String[] stringToArr(String cond) {
-		String[] cnd = cond.split(", ");
-		String[] newcnd = new String[3];
-		newcnd[0] = cnd[0].substring(1, 2);
-		newcnd[1] = cnd[1];
-		newcnd[2] = cnd[2].substring(0, 1);
-		return newcnd;
+		return cond.replaceAll("\\[", "").replaceAll("\\]", "").split(", ");
 	}
 
 	public String parse() {
@@ -63,4 +87,5 @@ public class ExprEval {
 	public String toString() {
 		return v1 + " " + op + " " + v2 + " = " + parse();
 	}
+
 }

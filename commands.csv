@@ -8,7 +8,7 @@ broadcast:,"broadcast(""%s"");"
 doBroadcastAndWait,"broadcastWait(""%s"");"
 wait:elapsed:from:,wait(%f);
 doForever,CONTROL:while (true) { %s }:FN
-doRepeat,CONTROL
+doRepeat,CONTROL:for (int i = 0; i < %s; i++) { %s }:EXPR:FN
 doIf,CONTROL:if(tempBool) { %s }:EXPR:FN
 doIfElse,CONTROL:if(tempBool) { %s } else { %s}:EXPR:FN:FN
 doWaitUntil,waitUntil(%s);

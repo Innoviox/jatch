@@ -6,10 +6,13 @@ import java.util.Map;
 import com.google.googlejavaformat.java.FormatterException;
 
 import main.java.jatch.files.*;
+import main.java.jatch.script.ExprEval;
 
 public class Jatch {
 	public static void main(String[] args) throws FormatterException, IOException {
-		Jatch.convert("test-recursive3");
+		ExprEval ee = new ExprEval("[=, [+, [+, 1, 0], [-, 3, 1]], 3]");
+		System.out.println(ee);
+		Jatch.convert("repeat-multiexpr");
 	}
 	
 	public static void convert(String file) throws FormatterException, IOException {

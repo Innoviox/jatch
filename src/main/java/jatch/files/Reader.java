@@ -152,25 +152,25 @@ public class Reader {
 				if ("CONTROL".equals(spl[0])) {
 					String cntrl = spl[1];
 					for (int i = 0; i < s.args.size(); i++) {
-						Object[] o = (Object[]) s.args.get(i);
+						Object[] o = null;
+						Long l = null;
+						try {
+							o = (Object[]) s.args.get(i);
+						} catch (ClassCastException e) {
+							l = (Long) s.args.get(i);
+						}
 						String n = spl[i + 2];
 						if ("EXPR".equals(n)) {
-							// String add = null; //, fmt = null;
-							if (o[0].equals("touching:")) {
-								// add = String.format(getJavaFunction((String)o[0]), o[1]);
-								cntrl = String.format(getJavaFunction((String)o[0]), o[1]) + cntrl;
+							if (o != null) {
+								if (o[0].equals("touching:")) {
+									cntrl = String.format(getJavaFunction((String)o[0]), o[1]) + cntrl;
+								} else {
+									java += String.format("ExprEval ee = new ExprEval(\"%s\");\n", Arrays.deepToString(o));
+									cntrl = "tempBool = Boolean.parseBoolean(ee.parse());" + cntrl;
+								}
 							} else {
-								java += String.format("ExprEval ee = new ExprEval(\"%s\");\n", Arrays.toString(o));
-								cntrl = "tempBool = Boolean.parseBoolean(ee.parse());" + cntrl;
+								cntrl = String.format(cntrl, l, "%s");
 							}
-							/*
-							try {
-								cntrl = String.format(cntrl, fmt, "%s");
-							} catch (MissingFormatArgumentException e) {
-								cntrl = String.format(cntrl, fmt, "%s", "%s");
-							}
-							*/
-							// java += add;
 						} else if ("FN".equals(n)) {
 							List<Script> fn = extractScripts(o);
 							String fnJava = scriptsToJava(fn);
