@@ -6,7 +6,6 @@ import java.util.Map;
 import com.google.googlejavaformat.java.FormatterException;
 
 import main.java.jatch.files.*;
-import main.java.jatch.script.ExprEval;
 
 public class Jatch {
 	public static void main(String[] args) throws IOException, FormatterException {
