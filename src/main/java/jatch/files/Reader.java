@@ -22,11 +22,14 @@ import com.google.googlejavaformat.java.FormatterException;
 import com.cedarsoftware.util.io.JsonReader;
 
 import main.java.jatch.script.Script;
+import main.java.jatch.script.Sprite;
+import main.java.jatch.script.Stage;
 
 public class Reader {
 	private static final Map<String, String> cmds = new HashMap<String, String>();
 	private static final Map<String, String> hooks = new HashMap<String, String>();
-
+	private static final String var = "private Object %s = %s;";
+	
 	public static void init() {
         String line = "";
         try (BufferedReader br = new BufferedReader(new FileReader(new File("commands.csv")))) {
@@ -118,7 +121,12 @@ public class Reader {
 		}
 		init();
 		List<Script> scripts = extractScripts(child);
-		String java = String.format("package compiled;\nimport main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;", child.get("objName"));
+		String java = String.format("package compiled;\nimport main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;private Controller controller;public %s() {};public %s(Controller c) { this.controller = c; }", child.get("objName"), child.get("objName"), child.get("objName"));
+		
+		for (Object _vars: (Object[]) child.get("variables")) {
+			Map<String, String> vars = (Map<String, String>) _vars;
+			java += String.format(var, vars.get("name"), vars.get("value"));
+		}
 		scriptsToJava(scripts);
 		for (String hook: hooks.keySet()) {
 			java += hooks.get(hook);
@@ -226,16 +234,16 @@ public class Reader {
 		return extracted;
 	}
 
-	public static void compileSource(String java) throws IOException {
+	public static void compileSingleSource(String java) throws IOException, FormatterException {
 		String name = java.split("public class ")[1].split(" ")[0].trim();
-		
+		System.out.println(java);
 
 		File f = new File("src/compiled/" + name + ".java");
 		f.getParentFile().mkdirs(); 
 		f.createNewFile();
 		
 		FileWriter fw = new FileWriter(f);
-		fw.write(java);
+		fw.write(new Formatter().formatSource(java));
 		fw.flush();
 		fw.close();
 		
@@ -249,5 +257,38 @@ public class Reader {
 	public static FileInputStream getSoundFile(String name) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public static void compileSource(Map<String, Object[]> data) throws IOException, FormatterException {
+		List<String> children = new ArrayList<String>();
+		for (Map<String, Object> child: getChildren(data)) {
+			try {
+				compileSingleSource(scriptToJava(child));
+				children.add((String) child.get("objName"));
+			} catch (NullPointerException e) {
+				
+			}
+		}		
+		
+		String controller = "package compiled;import main.java.jatch.script.*;import java.util.List;public class GameController extends Controller {  public GameController(List<Sprite> sprites, Stage stage) {super(sprites, stage);}";
+		for (Object _var: data.get("variables")) {
+			Map<String, Object> variable = (Map<String, Object>) _var;
+			controller += String.format(var, variable.get("name"), variable.get("value"));
+		}
+		controller += "}";
+		compileSingleSource(controller);
+		
+		String main = "package compiled;import main.java.jatch.script.*;import main.java.jatch.graphics.*;import java.util.ArrayList;import java.util.List;public class Game {public static void main(String[] args) throws Exception {"
+				+ "List<Sprite> sprites = new ArrayList<Sprite>();";
+		for (String s: children) {
+			main += String.format("sprites.add(new %s());", s);
+		}
+		main += "Stage stage = new Stage(\"" + ((Map<String, Object>)((Object[])data.get("costumes"))[0]).get("costumeName") + "\");";
+		main += "Controller c = new GameController(sprites, stage);DrawController dc = new DrawController(c);dc.start();}}";
+		compileSingleSource(main);
+	}
+	
+	public static void compileSource(String path) throws IOException, FormatterException {
+		compileSource(read(path));
 	}
 }

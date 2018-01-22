@@ -1,6 +1,5 @@
 package main.java.jatch.graphics;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -19,13 +18,19 @@ public class DrawController {
     		canvas = new Canvas(controller.getSprites(), controller.getStage());
     	}
     
-    public void start() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public void start() throws Exception {
     		controller.whenFlagClicked();
-        Runnable update = () -> update();
+        Runnable update = () -> {
+			try {
+				update();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		};
         scheduler.scheduleAtFixedRate(update,1,1000/60, TimeUnit.MILLISECONDS);
     }
 
-	private void update() {
+	private void update() throws Exception {
 		controller.update();
 		canvas.paint(canvas.getGraphics());
 	}

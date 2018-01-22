@@ -4,10 +4,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.sound.midi.MidiUnavailableException;
 
 import main.java.jatch.graphics.DrawController;
 
@@ -22,6 +25,13 @@ public class Controller implements KeyListener, MouseListener {
 	public Controller(List<Sprite> sprites, Stage stage) {
 		threads = new ArrayList<Thread>();
 		this.sprites = sprites;
+		for (Sprite s: sprites) {
+			try {
+				s.initialize();
+			} catch (MidiUnavailableException e) {
+				e.printStackTrace();
+			}
+		}
 		this.stage = stage;
 		mouseDown = false;
 		oldBackdrop = stage.getBackdrop();
@@ -102,4 +112,11 @@ public class Controller implements KeyListener, MouseListener {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void set(String var, Object nv) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		field(var).set(this, nv);
+	}
+	
+	public Field field(String var) throws NoSuchFieldException, SecurityException { return this.getClass().getField(var); }
+	public Object fieldget(String var) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException { return field(var).get(this); }
 }

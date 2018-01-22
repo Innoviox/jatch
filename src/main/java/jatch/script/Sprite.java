@@ -49,11 +49,11 @@ public abstract class Sprite implements MouseListener {
 	private int penSize;
 	private boolean clone;
 	
-	private Synthesizer midiSynth;
-	private Instrument[] instr;
+	public static Synthesizer midiSynth;
+	public static Instrument[] instr;
 	private MidiChannel[] mChannels;
 	
-	public void initialize() throws MidiUnavailableException {
+	public static void initialize() throws MidiUnavailableException {
         midiSynth = MidiSystem.getSynthesizer(); 
         midiSynth.open();
 
@@ -316,7 +316,11 @@ public abstract class Sprite implements MouseListener {
 	
 	// Data
 	public void set(String var, Object nv) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-		field(var).set(this, nv);
+		try {
+			field(var).set(this, nv);
+		} catch (NoSuchFieldException e) {
+			controller.set(var, nv);
+		}
 	}
 	
 	public void change(String var, double dv) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {

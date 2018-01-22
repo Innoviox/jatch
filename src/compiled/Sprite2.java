@@ -2,18 +2,18 @@ package compiled;
 
 import main.java.jatch.script.*;
 
-public class Sprite1 extends Sprite {
+public class Sprite2 extends Sprite {
   private String tempString;
   private boolean tempBool;
   private Controller controller;
 
-  public Sprite1() {};
+  public Sprite2() {};
 
-  public Sprite1(Controller c) {
+  public Sprite2(Controller c) {
     this.controller = c;
   }
 
-  private Object private1 = 0;
+  private Object private2 = 0;
 
   public void whenClicked() throws Exception {}
 
@@ -26,14 +26,14 @@ public class Sprite1 extends Sprite {
   public void whenKeyPressed(String key) throws Exception {}
 
   public void whenFlagClicked() throws Exception {
-    set("private1", 0);
+    set("private2", 0);
     set("global", 0);
-    change("private1", 1);
+    change("private2", 1);
     change("global", 1);
-    showVar("private1");
+    showVar("private2");
     showVar("global");
     hideVar("global");
-    hideVar("private1");
+    hideVar("private2");
   }
 
   public void whenCloned() throws Exception {}
