@@ -2,19 +2,11 @@ package main.java.jatch.files;
 
 import java.awt.Image;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,17 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingFormatArgumentException;
-
-import javax.tools.DiagnosticCollector;
-import javax.tools.FileObject;
-import javax.tools.ForwardingJavaFileManager;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileManager;
-import javax.tools.JavaFileObject;
-import javax.tools.SimpleJavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardLocation;
-import javax.tools.ToolProvider;
 
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
@@ -128,11 +109,13 @@ public class Reader {
 	}
 	
 	public static String getJavaFunction(String scratchMethod) {
-		return cmds.get(
-				scratchMethod);
+		return cmds.get(scratchMethod);
 	}
 	
 	public static String scriptToJava(Map<String, Object> child) throws FormatterException {
+		if (child == null || child.get("target") != null) {
+			throw new NullPointerException("Child is null or nonextant");
+		}
 		init();
 		List<Script> scripts = extractScripts(child);
 		String java = String.format("package compiled;\nimport main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;", child.get("objName"));
@@ -150,7 +133,8 @@ public class Reader {
 		String java = "";
 		String header = null;
 		String currHook = null;
-		
+		String ee = "ExprEval ee = new ExprEval(\"%s\", this);\n";
+		String tb = "tempBool = Boolean.parseBoolean(ee.parse())";
 		for (Script s: scripts) {			
 			if ("DUMMY".equals(s.cmd)) {
 				java += "}\n";
@@ -168,7 +152,6 @@ public class Reader {
 			}
 			else { 
 				String cmd = s.cmd;
-				// TODO: Implement Control
 				String[] spl = cmd.split(":");
 				if ("CONTROL".equals(spl[0])) {
 					String cntrl = spl[1];
@@ -185,9 +168,12 @@ public class Reader {
 							if (o != null) {
 								if (o[0].equals("touching:")) {
 									cntrl = String.format(getJavaFunction((String)o[0]), o[1]) + cntrl;
+								} else if (s.ocmd.equals("doUntil")) {
+									String add = String.format(ee, Arrays.deepToString(o)) + tb;
+									cntrl = String.format(cntrl, add, "%s");
 								} else {
-									java += String.format("ExprEval ee = new ExprEval(\"%s\");\n", Arrays.deepToString(o));
-									cntrl = "tempBool = Boolean.parseBoolean(ee.parse());" + cntrl;
+									java += String.format(ee, Arrays.deepToString(o));
+									cntrl = tb + cntrl;
 								}
 							} else {
 								cntrl = String.format(cntrl, l, "%s");
@@ -206,7 +192,7 @@ public class Reader {
 					java += cntrl + "\n";
 				} else {
 					try {
-						String add = String.format(spl[0], s.args.toArray());
+						String add = String.format(spl[0].replaceAll("/", ","), s.args.toArray());
 						if (!add.endsWith("{")) java += add + ";";
 						else {
 							// java += add;
@@ -238,7 +224,7 @@ public class Reader {
 		return extracted;
 	}
 
-	public static void compileSource(String java) throws Exception {
+	public static void compileSource(String java) throws IOException {
 		String name = java.split("public class ")[1].split(" ")[0].trim();
 		
 

@@ -4,22 +4,25 @@ import java.util.Arrays;
 
 public class ExprEval {
 	private String op, v1, v2;
-	private boolean arith, comp, bool, not;
+	private boolean arith, comp, bool, not, read;
 	private String result;
 	protected int convs;
+	public static Sprite s;
 	
-	public ExprEval(String[] cond) {
+	public ExprEval(String[] cond, Sprite s) {
+		this.s = s;
 		op = cond[0];
 		arith = op.equals("+") || op.equals("-") || op.equals("*") || op.equals("/");
 		comp = op.equals(">") || op.equals("<") || op.equals("=") || op.equals(">=") || op.equals("<=");
 		bool = op.equals("and") || op.equals("or");
 		not = op.equals("not");
+		read = op.equals("readVariable");
 		v1 = cond[1];
 		int i = 1;
 		try {
 			Integer.parseInt(v1);
 		} catch (NumberFormatException e) {
-			ExprEval ee = new ExprEval(Arrays.copyOfRange(cond, i, cond.length));
+			ExprEval ee = new ExprEval(Arrays.copyOfRange(cond, i, cond.length), s);
 			v1 = ee.parse();
 			i += ee.convs * 2;
 			convs += ee.convs;
@@ -27,12 +30,12 @@ public class ExprEval {
 			i += 2;
 		}
 		i++;
-		if (!not) {
+		if (!not && !read) {
 			v2 = cond[i];
 			try {
 				Integer.parseInt(v2);
 			} catch (NumberFormatException e) {
-				ExprEval ee = new ExprEval(Arrays.copyOfRange(cond, i, cond.length));
+				ExprEval ee = new ExprEval(Arrays.copyOfRange(cond, i, cond.length), s);
 				v2 = ee.parse();
 				i += ee.convs * 2;
 				convs += ee.convs;
@@ -42,8 +45,8 @@ public class ExprEval {
 		}
 	}
 	
-	public ExprEval(String cond) {
-		this(stringToArr(cond));
+	public ExprEval(String cond, Sprite s) {
+		this(stringToArr(cond), s);
 	}
 	
 	private static String[] stringToArr(String cond) {
@@ -68,16 +71,24 @@ public class ExprEval {
 			boolean b1 = Boolean.parseBoolean(v1), b2 = Boolean.parseBoolean(v2);
 			if (op.equals("and")) result = (b1 && b2) + "";
 			else if (op.equals("or")) result = (b1 || b2) + "";
-		} else {
+		} else if (not) {
 			boolean b1 = Boolean.parseBoolean(v1);
 			result = (!b1) + "";
+		} else {
+			Object o = null;
+			try {
+				o = s.fieldget(v1);
+			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+				e.printStackTrace();
+			}
+			result = o + "";
 		}
 		
 		return result;
 	}
 	
 	public static String parse(String[] cond) {
-		return new ExprEval(cond).parse();
+		return new ExprEval(cond, s).parse();
 	}
 	
 	public String getResult() { return result; }

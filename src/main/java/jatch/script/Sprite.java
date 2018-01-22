@@ -330,8 +330,8 @@ public abstract class Sprite implements MouseListener {
 		VarShower.hide(fieldget(var), var);
 	}
 	
-	private Field field(String var) throws NoSuchFieldException, SecurityException { return this.getClass().getField(var); }
-	private Object fieldget(String var) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException { return field(var).get(this); }
+	public Field field(String var) throws NoSuchFieldException, SecurityException { return this.getClass().getField(var); }
+	public Object fieldget(String var) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException { return field(var).get(this); }
 	
 	public void add(Object item, String list) {
 		get(list).add(item);

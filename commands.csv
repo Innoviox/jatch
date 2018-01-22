@@ -13,7 +13,7 @@ doRepeat,CONTROL:for (int i = 0; i < %s; i++) { %s }:EXPR:FN
 doIf,CONTROL:if(tempBool) { %s }:EXPR:FN
 doIfElse,CONTROL:if(tempBool) { %s } else { %s}:EXPR:FN:FN
 doWaitUntil,waitUntil(%s);
-doUntil,CONTROL
+doUntil,CONTROL:while(!tempBool) { %s; %s}:EXPR:FN
 stopScripts,stop(%s);
 whenCloned,public void whenCloned() {
 createCloneOf,clone(%s);
@@ -25,3 +25,4 @@ DUMMY,DUMMY
 forward:,move(%s)
 turnRight:,turnR(%s)
 turnLeft:,turnL(%s)
+changeVar:by:,change("%s"/ %s)

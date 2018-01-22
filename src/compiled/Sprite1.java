@@ -17,14 +17,10 @@ public class Sprite1 extends Sprite {
   public void whenKeyPressed(String key) {}
 
   public void whenFlagClicked() {
-    for (int i = 0; i < 10; i++) {
-      ExprEval ee = new ExprEval("[=, [+, 1, 2], 3]");
+    while (!tempBool) {
+      ExprEval ee = new ExprEval("[=, [readVariable, i], 3]", this);
       tempBool = Boolean.parseBoolean(ee.parse());
-      if (tempBool) {
-        turnR(15);
-      } else {
-        turnL(15);
-      }
+      change("i", 1);
     }
   }
 
