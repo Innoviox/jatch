@@ -9,7 +9,7 @@ import main.java.jatch.files.*;
 
 public class Jatch {
 	public static void main(String[] args) throws IOException, FormatterException {
-		Jatch.convert("var");
+		Jatch.convert("forever-touching");
 	}
 	
 	public static void convert(String file) throws IOException, FormatterException {

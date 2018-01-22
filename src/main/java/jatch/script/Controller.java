@@ -27,27 +27,27 @@ public class Controller implements KeyListener, MouseListener {
 		oldBackdrop = stage.getBackdrop();
 	}
 	
-	public void broadcast(String msg) {
+	public void broadcast(String msg) throws Exception {
 		for (Sprite s: sprites) s.whenIRecieve(msg);
 	}
 	
-	public void whenFlagClicked() {
+	public void whenFlagClicked() throws Exception {
 		for (Sprite s: sprites) s.whenFlagClicked();
 	}
 	
-	public void whenKeyPressed(String key) {
+	public void whenKeyPressed(String key) throws Exception {
 		for (Sprite s: sprites) s.whenKeyPressed(key);
 	}
 	
-	public void whenBackdropSwitches(String newbn) {
+	public void whenBackdropSwitches(String newbn) throws Exception {
 		for (Sprite s: sprites) s.whenBackdropSwitches(newbn);
 	}
 	
-	public void whenAttrGreater(String attr, Object val) {
+	public void whenAttrGreater(String attr, Object val) throws Exception {
 		for (Sprite s: sprites) s.whenFlagClicked();
 	}
 
-	public void update() {
+	public void update() throws Exception {
 		String newbn = stage.getBackdrop();
 		if (!oldBackdrop.equals(newbn)) {
 			oldBackdrop = newbn;

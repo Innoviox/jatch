@@ -38,13 +38,13 @@ public class Reader {
             e.printStackTrace();
         }
 
-        String s = "whenGreenFlag,public void whenFlagClicked() {\n" + 
-        		"whenKeyPressed,public void whenKeyPressed(String key) {:if (\"%s\".equals(key)) {\n" + 
-        		"whenClicked,public void whenClicked() {\n" + 
-        		"whenSceneStarts,public void whenBackdropSwitches(String newbn) {\n" + 
-        		"whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) {\n" + 
-        		"whenIReceive,public void whenIRecieve(String msg) {\n" + 
-        		"whenCloned,public void whenCloned() {";
+        String s = "whenGreenFlag,public void whenFlagClicked() throws Exception {\n" + 
+        		"whenKeyPressed,public void whenKeyPressed(String key) throws Exception {:if (\"%s\".equals(key)) {\n" + 
+        		"whenClicked,public void whenClicked() throws Exception {\n" + 
+        		"whenSceneStarts,public void whenBackdropSwitches(String newbn) throws Exception {:if (\"%s\".equals(newbn)) {\n" + 
+        		"whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) throws Exception {\n" + 
+        		"whenIReceive,public void whenIRecieve(String msg) throws Exception {:if (\"%s\".equals(msg)) {\n" + 
+        		"whenCloned,public void whenCloned() throws Exception {";
         for (String hook: s.split("\n")) {
     	        String[] h = hook.split(",");
     	        hooks.put(h[0], h[1].split(":")[0].replaceAll("/", ","));
@@ -153,6 +153,7 @@ public class Reader {
 			else { 
 				String cmd = s.cmd;
 				String[] spl = cmd.split(":");
+
 				if ("CONTROL".equals(spl[0])) {
 					String cntrl = spl[1];
 					for (int i = 0; i < s.args.size(); i++) {
@@ -179,6 +180,7 @@ public class Reader {
 								cntrl = String.format(cntrl, l, "%s");
 							}
 						} else if ("FN".equals(n)) {
+							
 							List<Script> fn = extractScripts(o);
 							String fnJava = scriptsToJava(fn);
 							try {

@@ -1,26 +1,26 @@
-whenGreenFlag,public void whenFlagClicked() {
-whenKeyPressed,public void whenKeyPressed(String key) {:if ("%s".equals(key)) {
-whenClicked,public void whenClicked() {
-whenSceneStarts,public void whenBackdropSwitches(String newbn) {
-whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) {
-whenIReceive,public void whenIRecieve(String msg) {:if ("%s".equals(msg)) {
-whenCloned,public void whenCloned() {
-broadcast:,"broadcast(""%s"");"
-doBroadcastAndWait,"broadcastWait(""%s"");"
+whenGreenFlag,public void whenFlagClicked() throws Exception {
+whenKeyPressed,public void whenKeyPressed(String key) throws Exception {:if ("%s".equals(key)) {
+whenClicked,public void whenClicked() throws Exception {
+whenSceneStarts,public void whenBackdropSwitches(String newbn) throws Exception {:if ("%s".equals(newbn)) {
+whenSensorGreaterThan,public void whenAttrGreater(String attr/ Object value) throws Exception {
+whenIReceive,public void whenIRecieve(String msg) throws Exception {:if ("%s".equals(msg)) {
+broadcast:,broadcast("%s");
+doBroadcastAndWait,broadcastWait("%s");
 wait:elapsed:from:,wait(%f);
 doForever,CONTROL:while (true) { %s }:FN
 doRepeat,CONTROL:for (int i = 0; i < %s; i++) { %s }:EXPR:FN
-doIf,CONTROL:if(tempBool) { %s }:EXPR:FN
-doIfElse,CONTROL:if(tempBool) { %s } else { %s}:EXPR:FN:FN
+doIf,CONTROL:;if(tempBool) { %s }:EXPR:FN
+doIfElse,CONTROL:;if(tempBool) { %s } else { %s }:EXPR:FN:FN
 doWaitUntil,waitUntil(%s);
-doUntil,CONTROL:while(!tempBool) { %s; %s}:EXPR:FN
+doUntil,CONTROL:while(!tempBool) { %s; %s }:EXPR:FN
 stopScripts,stop(%s);
-whenCloned,public void whenCloned() {
+whenCloned,public void whenCloned() throws Exception {
 createCloneOf,clone(%s);
 deleteClone,deleteClone();
 touching:,tempString = "%s"; if(tempString.equals("_mouse_")) { tempBool = touchingPtr(); } else { tempBool = touching(tempString); }
 touchingColor:,touchingColor(%f);
-color:sees:,"colorTouchingColor(%f, %f)"
+color:sees:,colorTouchingColor(%f/ %f)
+distanceTo:,tempString = "%s"; if(tempString.equals("_mouse_")) { teempBool = distancePtr(); } else { tempBool = distance(Sprite thing); }
 DUMMY,DUMMY
 forward:,move(%s)
 turnRight:,turnR(%s)

@@ -370,11 +370,11 @@ public abstract class Sprite implements MouseListener {
 	
 	private List<Object> get(String list) { return lists.get(list); }
 	// Events
-	public void broadcast(String msg) {
+	public void broadcast(String msg) throws Exception {
 		controller.broadcast(msg);
 	}
 	
-	public void broadcastWait(String msg) {
+	public void broadcastWait(String msg) throws Exception {
 		controller.broadcast(msg);
 	}
 	
@@ -406,10 +406,13 @@ public abstract class Sprite implements MouseListener {
 	}
 	
 	// Sensing
-	boolean touching(Sprite thing) {
+	public boolean touching(Sprite thing) {
 		return false;
 	}
-	boolean touchingPtr() {
+	public boolean touching(String thing) {
+		return false;
+	}
+	public boolean touchingPtr() {
 		return false;
 	}
 	boolean touchingColor(Color c) {
@@ -437,13 +440,13 @@ public abstract class Sprite implements MouseListener {
 	String username() { return ""; }
 	
 	// Hooks
-	public abstract void whenFlagClicked();
-	public abstract void whenKeyPressed(String key);
-	public abstract void whenClicked();
-	public abstract void whenBackdropSwitches(String newbn);
-	public abstract void whenAttrGreater(String attr, Object val);
-	public abstract void whenIRecieve(String msg);
-	public abstract void whenCloned();
+	public abstract void whenFlagClicked() throws Exception;
+	public abstract void whenKeyPressed(String key) throws Exception;
+	public abstract void whenClicked() throws Exception;
+	public abstract void whenBackdropSwitches(String newbn) throws Exception;
+	public abstract void whenAttrGreater(String attr, Object val) throws Exception;
+	public abstract void whenIRecieve(String msg) throws Exception;
+	public abstract void whenCloned() throws Exception;
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -451,8 +454,13 @@ public abstract class Sprite implements MouseListener {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {	
-		whenClicked();
+	public void mousePressed(MouseEvent e){	
+		try {
+			whenClicked();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	@Override

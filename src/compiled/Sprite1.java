@@ -6,23 +6,32 @@ public class Sprite1 extends Sprite {
   private String tempString;
   private boolean tempBool;
 
-  public void whenClicked() {}
+  public void whenClicked() throws Exception {}
 
-  public void whenAttrGreater(String attr, Object value) {}
+  public void whenAttrGreater(String attr, Object value) throws Exception {}
 
-  public void whenBackdropSwitches(String newbn) {}
+  public void whenBackdropSwitches(String newbn) throws Exception {}
 
-  public void whenIRecieve(String msg) {}
+  public void whenIRecieve(String msg) throws Exception {}
 
-  public void whenKeyPressed(String key) {}
+  public void whenKeyPressed(String key) throws Exception {}
 
-  public void whenFlagClicked() {
-    while (!tempBool) {
-      ExprEval ee = new ExprEval("[=, [readVariable, i], 3]", this);
-      tempBool = Boolean.parseBoolean(ee.parse());
-      change("i", 1);
+  public void whenFlagClicked() throws Exception {
+    while (true) {
+      tempString = "_mouse_";
+      if (tempString.equals("_mouse_")) {
+        tempBool = touchingPtr();
+      } else {
+        tempBool = touching(tempString);
+      }
+      ;
+      if (tempBool) {
+        turnR(15);
+      } else {
+        turnL(15);
+      }
     }
   }
 
-  public void whenCloned() {}
+  public void whenCloned() throws Exception {}
 }
