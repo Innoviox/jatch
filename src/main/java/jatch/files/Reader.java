@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingFormatArgumentException;
 
+import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
 import com.cedarsoftware.util.io.JsonReader;
@@ -250,13 +255,22 @@ public class Reader {
     }
 	
 	public static Image getImageFile(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return ImageIO.read(new File(name));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
-	public static FileInputStream getSoundFile(String name) {
+	public static AudioInputStream getSoundFile(String name) {
 		// TODO Auto-generated method stub
-		return null;
+		try {
+			return AudioSystem.getAudioInputStream(new File(name));
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public static void compileSource(Map<String, Object[]> data) throws IOException, FormatterException {

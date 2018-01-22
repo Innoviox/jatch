@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDateTime;
@@ -61,6 +62,10 @@ public abstract class Sprite implements MouseListener {
         instr = midiSynth.getDefaultSoundbank().getInstruments();
 	}
 	
+	public void initialize(Controller c) {
+		this.controller = c;
+		this.lists = new HashMap<String, List<Object>>();
+	}
 	// Motion
 	public void move(double steps) {
 		xPos += Math.cos(dir) * steps;
