@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 import javax.sound.midi.Instrument;
 import javax.sound.midi.MidiChannel;
@@ -29,6 +30,7 @@ public abstract class Sprite implements MouseListener {
 	public Variable<Double> xPos, yPos, dir, size, vol, tempo, loudness, timer;
 	public Variable<String> costumeN, backName,  answer;
 	*/
+	public final String USERNAME = "username";
 	public double xPos, yPos, dir, size, vol, tempo, loudness, timer;
 	public String costumeN, backName,  answer, rotStyle;
 	private Map<String, List<Object>> lists;
