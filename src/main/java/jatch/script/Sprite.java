@@ -432,6 +432,12 @@ public abstract class Sprite implements MouseListener {
 	boolean mouseDown() { return false; }
 	double mouseX() { return 0; }
 	double mouseY() { return 0; }
+	
+	// Operator (functions)
+	public int random(int min, int max) {
+		return (int)(Math.random()*max) + min;
+	}
+	
 	// Not doing video
 	void resetTimer() {}
 	VarShower getAttr(String attr, Sprite sprite) { return null; } // Store variables in Map?
