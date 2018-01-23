@@ -9,7 +9,7 @@ public class Game {
   public static void main(String[] args) throws Exception {
     List<Sprite> sprites = new ArrayList<Sprite>();
     sprites.add(new Sprite1());
-    Stage stage = new Stage("backdrop1");
+    Stage stage = new Stage("forever-touching/3.png");
     Controller c = new GameController(sprites, stage);
     DrawController dc = new DrawController(c);
     dc.start();

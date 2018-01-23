@@ -1,6 +1,7 @@
 package main.java.jatch.files;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -136,10 +137,10 @@ public class Reader {
 		}
 		
 		String costumes = "costumes = new ArrayList<Image>();";
-		String add = "costumes.add(Reader.getImageFile(\"" + dir + "%s.%s\"));";
+		String add = "costumes.add(Reader.getImageFile(\"%s\"));";
 		for (Object _cost: (Object[]) child.get("costumes")) {
 			Map<String, Object> cost = (Map<String, Object>) _cost;
-			costumes += String.format(add, cost.get("baseLayerID"), cost.get("baseLayerMD5").toString().split("\\.")[1]);
+			costumes += String.format(add, costumeName(cost, dir));
 		}
 		
 		java = String.format(java, costumes);
@@ -158,7 +159,7 @@ public class Reader {
 			return new Formatter().formatSource(java + "}");
 		}
 	}
-
+	
 	public static String scriptsToJava(List<Script> scripts) {
 		String java = "";
 		String header = null;
@@ -321,12 +322,15 @@ public class Reader {
     }
 	
 	public static Image getImageFile(String name) {
+		System.out.println("Reading: " + name);
+		BufferedImage bi = null;
 		try {
-			return ImageIO.read(new File(name));
+			bi = ImageIO.read(new FileInputStream(new File(name)));
+			System.out.println("Success reading: " + name);
 		} catch (IOException e) {
-			System.out.println("Couldn't read: " + name);
-			return null;
+			System.err.println("Couldn't read: " + name);
 		}
+		return bi;
 	}
 	
 	public static AudioInputStream getSoundFile(String name) {
@@ -365,12 +369,16 @@ public class Reader {
 		for (String s: children) {
 			main += String.format("sprites.add(new %s());", s);
 		}
-		main += "Stage stage = new Stage(\"" + ((Map<String, Object>)((Object[])data.get("costumes"))[0]).get("costumeName") + "\");";
+		main += "Stage stage = new Stage(\"" + costumeName(((Map<String, Object>)((Object[])data.get("costumes"))[0]), dir) + "\");";
 		main += "Controller c = new GameController(sprites, stage);DrawController dc = new DrawController(c);dc.start();}}";
 		compileSingleSource(main);
 	}
 	
 	public static void compileSource(String path) throws IOException, FormatterException {
 		compileSource(read(path + "project.json"), path);
+	}
+	
+	private static String costumeName(Map<String, Object> cost, String dir) {
+		return String.format( dir + "%s.%s", cost.get("baseLayerID"), cost.get("baseLayerMD5").toString().split("\\.")[1]);
 	}
 }

@@ -19,11 +19,13 @@ public class DrawController {
     	}
     
     public void start() throws Exception {
+    		canvas.show();
     		controller.whenFlagClicked();
         Runnable update = () -> {
 			try {
 				update();
 			} catch (Exception e) {
+				System.out.println("EXCEPTION! RUN FOR YOUR LIFE!");
 				e.printStackTrace();
 			}
 		};

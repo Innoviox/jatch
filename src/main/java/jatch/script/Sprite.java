@@ -65,7 +65,9 @@ public abstract class Sprite implements MouseListener {
 	public void initialize(Controller c) {
 		this.controller = c;
 		this.lists = new HashMap<String, List<Object>>();
-		this.pen = new StandardPen();
+		// this.pen = new StandardPen(c.getDrawController().getCanvas());
+		this.img = costumes.get(0);
+		System.out.println(costumes);
 	}
 	
 	// Motion

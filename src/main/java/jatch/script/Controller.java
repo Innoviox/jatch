@@ -25,13 +25,8 @@ public class Controller implements KeyListener, MouseListener {
 	public Controller(List<Sprite> sprites, Stage stage) {
 		threads = new ArrayList<Thread>();
 		this.sprites = sprites;
-		for (Sprite s: sprites) {
-			try {
-				s.initialize();
-			} catch (MidiUnavailableException e) {
-				e.printStackTrace();
-			}
-		}
+		for (Sprite s: sprites) s.initialize(this);
+
 		this.stage = stage;
 		mouseDown = false;
 		oldBackdrop = stage.getBackdrop();
@@ -42,7 +37,16 @@ public class Controller implements KeyListener, MouseListener {
 	}
 	
 	public void whenFlagClicked() throws Exception {
-		for (Sprite s: sprites) s.whenFlagClicked();
+
+		for (Sprite s: sprites) {
+			Runnable update = () -> { try {
+				s.whenFlagClicked();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}};
+			threads.add(new Thread(update));
+		}
 	}
 	
 	public void whenKeyPressed(String key) throws Exception {
