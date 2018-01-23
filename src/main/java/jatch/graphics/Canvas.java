@@ -20,22 +20,26 @@ public class Canvas extends JFrame {
 	private Stage stage;
 	
 	private BufferedImage bi = new BufferedImage(MAXWIDTH, MAXHEIGHT, BufferedImage.TYPE_INT_ARGB);
-
+	
+	
 	public Canvas(List<Sprite> objects, Stage stage) {
 		// super(MAXWIDTH, MAXHEIGHT);
 		this.setSize(MAXWIDTH, MAXHEIGHT);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.objects = objects;
 		this.stage = stage;
+		this.setContentPane(stage);
 	}
 
 	public void paint(Graphics g) {
 		// TODO: Implement layering & hiding
+		/*
 		Graphics b = bi.getGraphics();
 		b.setColor(Color.black);
 		b.fillRect(0,0,MAXWIDTH,MAXHEIGHT);
 		g.drawImage(stage.getImage(), 0, 0, MAXWIDTH, MAXHEIGHT, new Color(255, 255, 255), null);
-		
+		*/
+		/*
 		List<Sprite> layered = new ArrayList<Sprite>();
 		List<Sprite> fronts = new ArrayList<Sprite>();
 		List<Sprite> backs = new ArrayList<Sprite>();
@@ -67,11 +71,16 @@ public class Canvas extends JFrame {
 			p.setBti(false);
 		}
 		
+		*/
 		
+		super.paintComponents(g);
+		// g.drawImage(stage.getImage(), 0, 0, MAXWIDTH, MAXHEIGHT, new Color(0, 0, 0), null);
 		for (Sprite p : objects) paint(p, g);
 
-		Graphics g2 = this.getGraphics();
-		g2.drawImage(bi, 0, 0, null);
+		// Graphics g2 = this.getGraphics();
+		// g.drawImage(bi, 0, 0, null);
+		// repaint();
+		// Toolkit.getDefaultToolkit().sync();
 	}
 
 	private void add(List<Sprite> fronts, Sprite p) {
