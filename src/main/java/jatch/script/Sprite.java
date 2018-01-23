@@ -447,6 +447,10 @@ public abstract class Sprite implements MouseListener {
 		return (int)(Math.random()*max) + min;
 	}
 	
+	public char letterOf(int index, String string) {
+		return string.charAt(index-1);
+	}
+	
 	// Not doing video
 	void resetTimer() {}
 	VarShower getAttr(String attr, Sprite sprite) { return null; } // Store variables in Map?
