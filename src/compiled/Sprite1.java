@@ -6,13 +6,6 @@ public class Sprite1 extends Sprite {
   private String tempString;
   private boolean tempBool;
   private Controller controller;
-
-  public Sprite1() {};
-
-  public Sprite1(Controller c) {
-    this.controller = c;
-  }
-
   private Object private1 = 0;
 
   public void whenClicked() throws Exception {}
