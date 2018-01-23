@@ -4,10 +4,15 @@ import java.util.Arrays;
 
 public class ExprEval {
 	private String op, v1, v2;
-	private boolean arith, comp, bool, not, read;
+	private boolean arith, comp, bool, not, read, allbool;
 	private String result;
 	protected int convs;
 	public static Sprite s;
+	
+	public ExprEval(boolean b) {
+		result = Boolean.toString(b);
+		allbool = true;
+	}
 	
 	public ExprEval(String[] cond, Sprite s) {
 		this.s = s;
@@ -54,6 +59,7 @@ public class ExprEval {
 	}
 
 	public String parse() {
+		if (allbool) return result;
 		if (arith) {
 			int i1 = Integer.parseInt(v1), i2 = Integer.parseInt(v2);
 			if (op.equals("+")) result = (i1 + i2) + "";

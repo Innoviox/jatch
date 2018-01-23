@@ -29,3 +29,5 @@ changeVar:by:,change("%s"/ %s)
 setVar:to:,set("%s"/ %s)
 showVariable:,showVar("%s")
 hideVariable:,hideVar("%s")
+procDef,public void %s throws Exception { 
+say:duration:elapsed:from:,say(%s/ %s)

@@ -29,7 +29,7 @@
 						["doIf",
 							["getParam", "boolean1", "b"],
 							[["say:duration:elapsed:from:", ["getParam", "string1", "r"], ["getParam", "number1", "r"]]]]]],
-				[94.45, 242.7, [["call", "test %n %s %b", 1, "string", ["<", "5", "5"]]]]],
+				],
 			"sounds": [{
 					"soundName": "meow",
 					"soundID": 0,

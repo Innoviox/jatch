@@ -146,12 +146,17 @@ public class Reader {
 		
 		scriptsToJava(scripts);
 		for (String hook: hooks.keySet()) {
+			if (hook.startsWith("public")) java += hook;
 			java += hooks.get(hook);
 			if (!java.endsWith("}\n")) java += "}\n";
 		}
+		// java += "}";
 		System.out.println(java);
-		java += "}";
-		return new Formatter().formatSource(java);
+		try {
+			return new Formatter().formatSource(java);
+		} catch (FormatterException e) {
+			return new Formatter().formatSource(java + "}");
+		}
 	}
 
 	public static String scriptsToJava(List<Script> scripts) {
@@ -159,8 +164,9 @@ public class Reader {
 		String header = null;
 		String currHook = null;
 		String ee = "ExprEval ee = new ExprEval(\"%s\", this);\n";
+		String eevar = "ExprEval ee = new ExprEval(%s);\n";
 		String tb = "tempBool = Boolean.parseBoolean(ee.parse())";
-		for (Script s: scripts) {			
+		for (Script s: scripts) {	
 			if ("DUMMY".equals(s.cmd)) {
 				java += "}\n";
 				if (header != null) {
@@ -169,6 +175,7 @@ public class Reader {
 				}
 				if (currHook != null) {
 					String old = hooks.get(currHook);
+					if (old == null) old = "";
 					if (old.endsWith("}\n")) old = old.substring(0, old.length() - 2);
 					hooks.put(currHook, old + java); // getJavaFunction(currHook).split(":")[0]
 					currHook = "";
@@ -178,8 +185,29 @@ public class Reader {
 			else { 
 				String cmd = s.cmd;
 				String[] spl = cmd.split(":");
-
-				if ("CONTROL".equals(spl[0])) {
+				if ("procDef".equals(s.ocmd)) {
+					String _sig = (String) s.args.get(0);
+					/*
+					sig = String.format(sig.replaceAll("%.", "%s,"), (Object[]) s.args.get(1))
+							.replaceFirst(" ", "\\(");
+					sig = sig.substring(0, sig.length() - 1) + ")";
+					*/
+					String sig = "";
+					String[] parts = _sig.split(" ");
+					Object[] names = (Object[]) s.args.get(1);
+					sig += parts[0] + "(";
+					for (int i = 1; i < parts.length; i++) {
+						String type = "";
+						switch (parts[i].charAt(1)) {
+							case 'n': type = "int"; break;
+							case 's': type = "String"; break;
+							case 'b': type = "boolean"; break;
+						}
+						sig += type + " " + names[i - 1] + ", ";
+					}
+					currHook = String.format(cmd, sig.substring(0, sig.length() - 2) + ")");
+					header = "";
+				} else if ("CONTROL".equals(spl[0])) {
 					String cntrl = spl[1];
 					for (int i = 0; i < s.args.size(); i++) {
 						Object[] o = null;
@@ -195,10 +223,17 @@ public class Reader {
 								if (o[0].equals("touching:")) {
 									cntrl = String.format(getJavaFunction((String)o[0]), o[1]) + cntrl;
 								} else if (s.ocmd.equals("doUntil")) {
-									String add = String.format(ee, Arrays.deepToString(o)) + tb;
+									String add;
+									if (o[0].equals("getParam")) 
+										add = String.format(eevar, o[1]) + tb;
+									else
+										add = String.format(ee, Arrays.deepToString(o)) + tb;
 									cntrl = String.format(cntrl, add, "%s");
 								} else {
-									java += String.format(ee, Arrays.deepToString(o));
+									if (o[0].equals("getParam")) 
+										java += String.format(eevar, o[1]);
+									else
+										java += String.format(ee, Arrays.deepToString(o));
 									cntrl = tb + cntrl;
 								}
 							} else {
@@ -219,12 +254,31 @@ public class Reader {
 					java += cntrl + "\n";
 				} else {
 					try {
-						String add = String.format(spl[0].replaceAll("/", ","), s.args.toArray());
+						List<Object> args = new ArrayList<Object>();
+						for (int i = 0; i < s.args.size(); i++) {
+							Object[] oarr = null;
+							Object o = null;
+							try {
+								oarr = (Object[]) s.args.get(i);
+							} catch (ClassCastException e) {
+								o = (Object) s.args.get(i);
+							}
+							if (oarr != null) {
+								args.add(oarr[1]);
+							} else {
+								try {
+									args.add((Long)o);
+								} catch (ClassCastException e) {
+									args.add("\"" + o + "\"");
+								}
+							}
+						}
+						String add = String.format(spl[0].replaceAll("/", ","), args.toArray());
 						if (!add.endsWith("{")) java += add + ";";
 						else {
 							// java += add;
 							if (s.args.size() > 0) {	
-								header = String.format(spl[1], s.args.toArray());
+								header = String.format(spl[1], args.toArray());
 								java += header;
 							}
 							currHook = s.ocmd;
