@@ -6,6 +6,15 @@ public class Sprite2 extends Sprite {
   private String tempString;
   private boolean tempBool;
   private Controller controller;
+
+  public Sprite2() {
+    this(false);
+  }
+
+  public Sprite2(boolean cloned) {
+    this.cloned = cloned;
+  }
+
   private Object private2 = 0;
 
   public void whenClicked() throws Exception {}

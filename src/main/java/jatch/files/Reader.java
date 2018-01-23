@@ -126,7 +126,7 @@ public class Reader {
 		}
 		init();
 		List<Script> scripts = extractScripts(child);
-		String java = String.format("package compiled;\nimport main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;private Controller controller;", child.get("objName"));
+		String java = String.format("package compiled;\nimport main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;private Controller controller;public %s() { this(false); } public %s(boolean cloned) { this.cloned = cloned; }", child.get("objName"), child.get("objName"), child.get("objName"));
 		
 		for (Object _vars: (Object[]) child.get("variables")) {
 			Map<String, String> vars = (Map<String, String>) _vars;

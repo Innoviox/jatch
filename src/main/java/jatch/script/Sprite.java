@@ -34,25 +34,25 @@ public abstract class Sprite implements MouseListener {
 	public final String USERNAME = "username";
 	public double xPos, yPos, dir, size, vol, tempo, loudness, timer;
 	public String costumeN, backName,  answer, rotStyle;
-	private Map<String, List<Object>> lists;
-	private Thread thread;
-	private List<Thread> soundThreads;
-	private Controller controller;
-	private boolean touchingPtr;
-	private Pen pen;
-	private Image img;
-	private Map<String, Double> effects;
+	protected Map<String, List<Object>> lists;
+	protected Thread thread;
+	protected List<Thread> soundThreads;
+	protected Controller controller;
+	protected boolean touchingPtr;
+	protected Pen pen;
+	protected Image img;
+	protected Map<String, Double> effects;
 	/* public Map<String, Variable> vars = new HashMap(); */
-	private boolean draw;
-	private int layer;
-	private boolean bti = false, fti = false;
-	private int instrument;
-	private int penSize;
-	private boolean clone;
+	protected boolean draw;
+	protected int layer;
+	protected boolean bti = false, fti = false;
+	protected int instrument;
+	protected int penSize;
+	protected boolean cloned;
 	
 	public static Synthesizer midiSynth;
 	public static Instrument[] instr;
-	private MidiChannel[] mChannels;
+	protected MidiChannel[] mChannels;
 	
 	public static void initialize() throws MidiUnavailableException {
         midiSynth = MidiSystem.getSynthesizer(); 
@@ -413,7 +413,7 @@ public abstract class Sprite implements MouseListener {
 	}
 	
 	public void deleteClone() {
-		if (this.clone) controller.getSprites().remove(this);
+		if (this.cloned) controller.getSprites().remove(this);
 	}
 	
 	// Sensing
