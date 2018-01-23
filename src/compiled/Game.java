@@ -9,7 +9,6 @@ public class Game {
   public static void main(String[] args) throws Exception {
     List<Sprite> sprites = new ArrayList<Sprite>();
     sprites.add(new Sprite1());
-    sprites.add(new Sprite2());
     Stage stage = new Stage("backdrop1");
     Controller c = new GameController(sprites, stage);
     DrawController dc = new DrawController(c);

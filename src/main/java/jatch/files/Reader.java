@@ -120,18 +120,30 @@ public class Reader {
 		return cmds.get(scratchMethod);
 	}
 	
-	public static String scriptToJava(Map<String, Object> child) throws FormatterException {
+	public static String scriptToJava(Map<String, Object> child, String dir) throws FormatterException {
 		if (child == null || child.get("target") != null) {
 			throw new NullPointerException("Child is null or nonextant");
 		}
 		init();
 		List<Script> scripts = extractScripts(child);
-		String java = String.format("package compiled;\nimport main.java.jatch.script.*;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;private Controller controller;public %s() { this(false); } public %s(boolean cloned) { this.cloned = cloned; }", child.get("objName"), child.get("objName"), child.get("objName"));
+		String java = String.format("package compiled;\nimport main.java.jatch.script.*;import main.java.jatch.files.Reader;import java.util.ArrayList;import java.awt.Image;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;private Controller controller;public %s() { this(false); } public %s(boolean cloned) { this.cloned = cloned; %s }", child.get("objName"), child.get("objName"), child.get("objName"), "%s");
 		
-		for (Object _vars: (Object[]) child.get("variables")) {
-			Map<String, String> vars = (Map<String, String>) _vars;
-			java += String.format(var, vars.get("name"), vars.get("value"));
+		if (child.containsKey("variables")) {
+			for (Object _vars: (Object[]) child.get("variables")) {
+				Map<String, String> vars = (Map<String, String>) _vars;
+				java += String.format(var, vars.get("name"), vars.get("value"));
+			}
 		}
+		
+		String costumes = "costumes = new ArrayList<Image>();";
+		String add = "costumes.add(Reader.getImageFile(\"" + dir + "%s.%s\"));";
+		for (Object _cost: (Object[]) child.get("costumes")) {
+			Map<String, Object> cost = (Map<String, Object>) _cost;
+			costumes += String.format(add, cost.get("baseLayerID"), cost.get("baseLayerMD5").toString().split("\\.")[1]);
+		}
+		
+		java = String.format(java, costumes);
+		
 		scriptsToJava(scripts);
 		for (String hook: hooks.keySet()) {
 			java += hooks.get(hook);
@@ -258,7 +270,7 @@ public class Reader {
 		try {
 			return ImageIO.read(new File(name));
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Couldn't read: " + name);
 			return null;
 		}
 	}
@@ -273,11 +285,11 @@ public class Reader {
 		}
 	}
 	
-	public static void compileSource(Map<String, Object[]> data) throws IOException, FormatterException {
+	public static void compileSource(Map<String, Object[]> data, String dir) throws IOException, FormatterException {
 		List<String> children = new ArrayList<String>();
 		for (Map<String, Object> child: getChildren(data)) {
 			try {
-				compileSingleSource(scriptToJava(child));
+				compileSingleSource(scriptToJava(child, dir));
 				children.add((String) child.get("objName"));
 			} catch (NullPointerException e) {
 				
@@ -285,9 +297,11 @@ public class Reader {
 		}		
 		
 		String controller = "package compiled;import main.java.jatch.script.*;import java.util.List;public class GameController extends Controller {  public GameController(List<Sprite> sprites, Stage stage) {super(sprites, stage);}";
-		for (Object _var: data.get("variables")) {
-			Map<String, Object> variable = (Map<String, Object>) _var;
-			controller += String.format(var, variable.get("name"), variable.get("value"));
+		if (data.containsKey("variables")) {
+			for (Object _var: data.get("variables")) {
+				Map<String, Object> variable = (Map<String, Object>) _var;
+				controller += String.format(var, variable.get("name"), variable.get("value"));
+			}
 		}
 		controller += "}";
 		compileSingleSource(controller);
@@ -303,6 +317,6 @@ public class Reader {
 	}
 	
 	public static void compileSource(String path) throws IOException, FormatterException {
-		compileSource(read(path));
+		compileSource(read(path + "project.json"), path);
 	}
 }

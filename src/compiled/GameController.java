@@ -7,6 +7,4 @@ public class GameController extends Controller {
   public GameController(List<Sprite> sprites, Stage stage) {
     super(sprites, stage);
   }
-
-  private Object global = 0;
 }

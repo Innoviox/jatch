@@ -49,7 +49,7 @@ public abstract class Sprite implements MouseListener {
 	protected int instrument;
 	protected int penSize;
 	protected boolean cloned;
-	
+	protected List<Image> costumes;
 	public static Synthesizer midiSynth;
 	public static Instrument[] instr;
 	protected MidiChannel[] mChannels;
@@ -65,7 +65,9 @@ public abstract class Sprite implements MouseListener {
 	public void initialize(Controller c) {
 		this.controller = c;
 		this.lists = new HashMap<String, List<Object>>();
+		this.pen = new StandardPen();
 	}
+	
 	// Motion
 	public void move(double steps) {
 		xPos += Math.cos(dir) * steps;

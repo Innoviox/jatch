@@ -1,6 +1,9 @@
 package compiled;
 
 import main.java.jatch.script.*;
+import main.java.jatch.files.Reader;
+import java.util.ArrayList;
+import java.awt.Image;
 
 public class Sprite2 extends Sprite {
   private String tempString;
@@ -13,6 +16,8 @@ public class Sprite2 extends Sprite {
 
   public Sprite2(boolean cloned) {
     this.cloned = cloned;
+    costumes = new ArrayList<Image>();
+    costumes.add(Reader.getImageFile("var-test1/costume1"));
   }
 
   private Object private2 = 0;

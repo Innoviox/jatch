@@ -1,6 +1,9 @@
 package compiled;
 
 import main.java.jatch.script.*;
+import main.java.jatch.files.Reader;
+import java.util.ArrayList;
+import java.awt.Image;
 
 public class Sprite1 extends Sprite {
   private String tempString;
@@ -13,9 +16,10 @@ public class Sprite1 extends Sprite {
 
   public Sprite1(boolean cloned) {
     this.cloned = cloned;
+    costumes = new ArrayList<Image>();
+    costumes.add(Reader.getImageFile("forever-touching/1.svg"));
+    costumes.add(Reader.getImageFile("forever-touching/2.svg"));
   }
-
-  private Object private1 = 0;
 
   public void whenClicked() throws Exception {}
 
@@ -28,14 +32,20 @@ public class Sprite1 extends Sprite {
   public void whenKeyPressed(String key) throws Exception {}
 
   public void whenFlagClicked() throws Exception {
-    set("private1", 0);
-    set("global", 0);
-    change("private1", 1);
-    change("global", 1);
-    showVar("private1");
-    showVar("global");
-    hideVar("global");
-    hideVar("private1");
+    while (true) {
+      tempString = "_mouse_";
+      if (tempString.equals("_mouse_")) {
+        tempBool = touchingPtr();
+      } else {
+        tempBool = touching(tempString);
+      }
+      ;
+      if (tempBool) {
+        turnR(15);
+      } else {
+        turnL(15);
+      }
+    }
   }
 
   public void whenCloned() throws Exception {}

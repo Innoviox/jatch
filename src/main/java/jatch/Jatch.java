@@ -9,7 +9,7 @@ import main.java.jatch.files.*;
 
 public class Jatch {
 	public static void main(String[] args) throws IOException, FormatterException {
-		Jatch.convert("var-test1");
+		Jatch.convert("forever-touching");
 	}
 	
 	public static void convert(String file) throws IOException, FormatterException {
@@ -17,6 +17,6 @@ public class Jatch {
 		String dir = file + "/";
 		Reader.init();
 		Unzipper.unzip(filename, dir);
-		Reader.compileSource(dir + "project.json");
+		Reader.compileSource(dir);
 	}
 }
