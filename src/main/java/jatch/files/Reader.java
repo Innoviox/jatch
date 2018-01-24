@@ -38,7 +38,7 @@ public class Reader {
 	
 	public static void init() {
         String line = "";
-        try (BufferedReader br = new BufferedReader(new FileReader(new File("commands.csv")))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(new File("commands-2.csv")))) {
             while ((line = br.readLine()) != null) {
                 String[] cmd = line.split(",");
                 cmds.put(cmd[0], cmd[1]);
@@ -127,7 +127,12 @@ public class Reader {
 		}
 		init();
 		List<Script> scripts = extractScripts(child);
-		String java = String.format("package compiled;\nimport main.java.jatch.script.*;import main.java.jatch.files.Reader;import java.util.ArrayList;import java.awt.Image;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;private Controller controller;private ExprEval ee;public %s() { this(false); } public %s(boolean cloned) { this.cloned = cloned; %s }", child.get("objName"), child.get("objName"), child.get("objName"), "%s");
+		String java = String.format("package compiled;"
+				+ "import main.java.jatch.script.*;import main.java.jatch.files.Reader;import java.util.ArrayList;import java.awt.Image;"
+				+ "public class %s extends Sprite {"
+				+ "private String tempString;private boolean tempBool;private Controller controller;private ExprEval ee;"
+				+ "public %s() { this(false); } public %s(boolean cloned) { this.cloned = cloned; this.addMouseListener(this); %s }", 
+				child.get("objName"), child.get("objName"), child.get("objName"), "%s");
 		
 		if (child.containsKey("variables")) {
 			for (Object _vars: (Object[]) child.get("variables")) {
@@ -208,6 +213,11 @@ public class Reader {
 					}
 					currHook = String.format(cmd, sig.substring(0, sig.length() - 2) + ")");
 					header = "";
+				} else if ("call".equals(s.ocmd)) {
+					String fn = ((String) s.args.get(0)).split(" ")[0] + "(";
+					for (int i = 1; i < s.args.size(); i++) fn += s.args.get(i) + ",";
+					fn = fn.substring(0, fn.length() - 1) + ");";
+					java += fn;
 				} else if ("CONTROL".equals(spl[0])) {
 					String cntrl = spl[1];
 					for (int i = 0; i < s.args.size(); i++) {
@@ -252,6 +262,7 @@ public class Reader {
 						}
 						// TODO: More casing support!			
 					}
+					System.out.println(cntrl);
 					java += cntrl + "\n";
 				} else {
 					try {

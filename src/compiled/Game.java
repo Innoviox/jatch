@@ -9,8 +9,7 @@ public class Game {
   public static void main(String[] args) throws Exception {
     List<Sprite> sprites = new ArrayList<Sprite>();
     sprites.add(new Sprite1());
-    sprites.add(new Apple());
-    Stage stage = new Stage("forever-touching-multisprite-rotation/4.svg");
+    Stage stage = new Stage("test/3.png");
     Controller c = new GameController(sprites, stage);
     DrawController dc = new DrawController(c);
     dc.start();

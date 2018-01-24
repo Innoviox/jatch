@@ -17,9 +17,10 @@ public class Sprite1 extends Sprite {
 
   public Sprite1(boolean cloned) {
     this.cloned = cloned;
+    this.addMouseListener(this);
     costumes = new ArrayList<Image>();
-    costumes.add(Reader.getImageFile("forever-touching-multisprite-rotation/1.svg"));
-    costumes.add(Reader.getImageFile("forever-touching-multisprite-rotation/2.svg"));
+    costumes.add(Reader.getImageFile("test/1.svg"));
+    costumes.add(Reader.getImageFile("test/2.svg"));
   }
 
   public void whenClicked() throws Exception {}
@@ -33,19 +34,21 @@ public class Sprite1 extends Sprite {
   public void whenKeyPressed(String key) throws Exception {}
 
   public void whenFlagClicked() throws Exception {
-    while (true) {
-      tempString = "_mouse_";
-      if (tempString.equals("_mouse_")) {
-        tempBool = touchingPtr();
-      } else {
-        tempBool = touching(tempString);
-      }
-      ;
-      if (tempBool) {
-        move(10);
-      }
+    goTo(0, 0);
+    for (int i = 0; i < 10; i++) {
+      move(10);
+      turnR(15);
+      Thread.sleep(1000 / 40);
+    }
+    for (int i = 0; i < 10; i++) {
+      move(10);
       turnL(15);
       Thread.sleep(1000 / 40);
+    }
+    ee = new ExprEval("[&, [|, [<, 2, 3], [>, 5, 6]], [=, [+, 2, 3], [-, 6, 1]]]", this);
+    tempBool = Boolean.parseBoolean(ee.parse());
+    if (tempBool) {
+      glide(1, 0, 0);
     }
   }
 

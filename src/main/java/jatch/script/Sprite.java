@@ -86,7 +86,8 @@ public abstract class Sprite extends JComponent implements MouseListener {
 		this.img = (BufferedImage)costumes.get(0);
 		at = new AffineTransform();
 		this._img = deepCopy(img);
-		this.addMouseListener(this);
+		for (Sprite s: c.getSprites()) this.addMouseListener(s);
+		// this.addMouseListener(controller.getStage());
 	}
 	
 	private BufferedImage deepCopy(BufferedImage bi) {
@@ -231,6 +232,7 @@ public abstract class Sprite extends JComponent implements MouseListener {
 	
 	public void say(String s) {
 		//TODO: Implement Say graphics
+		System.out.println(this.getClass() + ": " + s);
 	}
 	
 	public void think(String s, double secs) throws InterruptedException {

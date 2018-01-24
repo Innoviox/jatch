@@ -33,3 +33,6 @@ procDef,public void %s throws Exception {
 say:duration:elapsed:from:,say(%s/ %s)
 changeXposBy:,changeX(%s)
 say:,say(%s)
+call,%s(%s)
+glideSecs:toX:y:elapsed:from:,glide(%s/ %s/ %s)
+gotoX:y:,goTo(%s/ %s)

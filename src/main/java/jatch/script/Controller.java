@@ -27,7 +27,7 @@ public class Controller extends Component implements KeyListener, MouseListener 
 		threads = new ArrayList<Thread>();
 		this.sprites = sprites;
 		for (Sprite s: sprites) s.initialize(this);
-
+		stage.initialize(this);
 		this.stage = stage;
 		mouseDown = false;
 		oldBackdrop = stage.getBackdrop();
