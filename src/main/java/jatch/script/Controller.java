@@ -1,5 +1,6 @@
 package main.java.jatch.script;
 
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -14,7 +15,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 import main.java.jatch.graphics.DrawController;
 
-public class Controller implements KeyListener, MouseListener {
+public class Controller extends Component implements KeyListener, MouseListener {
 	private final List<Thread> threads;
 	private final List<Sprite> sprites;
 	private String oldBackdrop;
@@ -46,6 +47,7 @@ public class Controller implements KeyListener, MouseListener {
 				e.printStackTrace();
 			}};
 			threads.add(new Thread(update));
+			threads.get(threads.size() - 1).start();
 		}
 	}
 	

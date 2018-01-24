@@ -1,7 +1,10 @@
 package main.java.jatch.script;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
+import javax.swing.JComponent;
 
 import main.java.jatch.files.Reader;
 import main.java.jatch.script.vars.ListShower;
@@ -25,7 +29,7 @@ import sun.audio.AudioStream;
 
 import TurtleGraphics.*;
 
-public abstract class Sprite implements MouseListener {
+public abstract class Sprite extends JComponent implements MouseListener {
 	// Variables
 	/*
 	public Variable<Double> xPos, yPos, dir, size, vol, tempo, loudness, timer;
@@ -53,6 +57,8 @@ public abstract class Sprite implements MouseListener {
 	public static Synthesizer midiSynth;
 	public static Instrument[] instr;
 	protected MidiChannel[] mChannels;
+	public static final int MAXWIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static final int MAXHEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
 	public static void initialize() throws MidiUnavailableException {
         midiSynth = MidiSystem.getSynthesizer(); 
@@ -60,6 +66,7 @@ public abstract class Sprite implements MouseListener {
 
         //get and load default instrument and channel lists
         instr = midiSynth.getDefaultSoundbank().getInstruments();
+        
 	}
 	
 	public void initialize(Controller c) {
@@ -67,9 +74,15 @@ public abstract class Sprite implements MouseListener {
 		this.lists = new HashMap<String, List<Object>>();
 		// this.pen = new StandardPen(c.getDrawController().getCanvas());
 		this.img = costumes.get(0);
-		System.out.println(costumes);
+		c.addMouseListener(this);
 	}
 	
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(img, MAXWIDTH / 2 + (int)xPos, MAXHEIGHT / 2 + (int)yPos, this);
+    }
+    
 	// Motion
 	public void move(double steps) {
 		xPos += Math.cos(dir) * steps;
@@ -428,7 +441,7 @@ public abstract class Sprite implements MouseListener {
 		return false;
 	}
 	public boolean touchingPtr() {
-		return false;
+		return touchingPtr;
 	}
 	boolean touchingColor(Color c) {
 		return false;

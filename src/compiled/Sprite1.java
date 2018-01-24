@@ -32,9 +32,7 @@ public class Sprite1 extends Sprite {
   public void whenKeyPressed(String key) throws Exception {}
 
   public void whenFlagClicked() throws Exception {
-	System.out.println("im evil");
     while (true) {
-    	  System.out.println("currently being evil");
       tempString = "_mouse_";
       if (tempString.equals("_mouse_")) {
         tempBool = touchingPtr();
@@ -43,6 +41,7 @@ public class Sprite1 extends Sprite {
       }
       ;
       if (tempBool) {
+    	    System.out.println("touching!");
         turnR(15);
       } else {
         turnL(15);

@@ -94,6 +94,6 @@ public class Canvas extends JFrame {
 	}
 
 	private void paint(Sprite p, Graphics g) {	
-		g.drawImage(p.getImage(), MAXWIDTH / 2 + (int)p.getXPos(), MAXHEIGHT / 2 + (int)p.getYPos(), null);
+		p.paintComponent(g);
 	}
 }
