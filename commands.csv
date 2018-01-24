@@ -8,11 +8,11 @@ broadcast:,broadcast("%s");
 doBroadcastAndWait,broadcastWait("%s");
 wait:elapsed:from:,wait(%f);
 doForever,CONTROL:while (true) { %s Thread.sleep(1000/40);}:FN
-doRepeat,CONTROL:for (int i = 0; i < %s; i++) { %s }:EXPR:FN
+doRepeat,CONTROL:for (int i = 0; i < %s; i++) { %s Thread.sleep(1000/40); }:EXPR:FN
 doIf,CONTROL:;if(tempBool) { %s }:EXPR:FN
 doIfElse,CONTROL:;if(tempBool) { %s } else { %s }:EXPR:FN:FN
 doWaitUntil,waitUntil(%s);
-doUntil,CONTROL:while(!tempBool) { %s %s; }:EXPR:FN:EXPR
+doUntil,CONTROL:while(!tempBool) { %s %s; Thread.sleep(1000/40); }:EXPR:FN:EXPR
 stopScripts,stop(%s);
 whenCloned,public void whenCloned() throws Exception {
 createCloneOf,clone(%s);

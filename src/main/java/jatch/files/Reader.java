@@ -344,6 +344,8 @@ public class Reader {
 	}
 	
 	public static void compileSource(Map<String, Object[]> data, String dir) throws IOException, FormatterException {
+		deleteDir(new File("src/compiled"));
+		
 		List<String> children = new ArrayList<String>();
 		for (Map<String, Object> child: getChildren(data)) {
 			try {
@@ -380,5 +382,15 @@ public class Reader {
 	
 	private static String costumeName(Map<String, Object> cost, String dir) {
 		return String.format( dir + "%s.%s", cost.get("baseLayerID"), cost.get("baseLayerMD5").toString().split("\\.")[1]);
+	}
+	
+	private static void deleteDir(File file) {
+	    File[] contents = file.listFiles();
+	    if (contents != null) {
+	        for (File f : contents) {
+	            deleteDir(f);
+	        }
+	    }
+	    file.delete();
 	}
 }

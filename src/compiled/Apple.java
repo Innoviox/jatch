@@ -41,11 +41,12 @@ public class Apple extends Sprite {
       }
       ;
       if (tempBool) {
-        move(1);
+        move(10);
       }
       turnR(15);
       ee = new ExprEval("[=, 1, 2]", this);
       tempBool = Boolean.parseBoolean(ee.parse());
+      Thread.sleep(1000 / 40);
     }
   }
 

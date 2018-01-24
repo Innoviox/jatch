@@ -86,6 +86,7 @@ public abstract class Sprite extends JComponent implements MouseListener {
 		this.img = (BufferedImage)costumes.get(0);
 		at = new AffineTransform();
 		this._img = deepCopy(img);
+		this.addMouseListener(this);
 	}
 	
 	private BufferedImage deepCopy(BufferedImage bi) {
@@ -126,12 +127,12 @@ public abstract class Sprite extends JComponent implements MouseListener {
     		if (dir > 360) dir = -dir + 360;
     }
 	public void move(double steps) {
-		xPos += Math.cos(dir) * steps;
-		yPos += Math.sin(dir) * steps;
+		xPos += Math.cos(Math.toRadians(dir)) * steps;
+		yPos += Math.sin(Math.toRadians(dir)) * steps;
 	}
 	
 	public void turnR(double degs) {
-		if (dir > 0) dir -= degs;
+		if (dir > 0) dir += degs;
 		else dir += degs;
 		// TODO: rotate actual image
 		// TODO: account for different rotation styles

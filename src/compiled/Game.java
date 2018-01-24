@@ -10,7 +10,7 @@ public class Game {
     List<Sprite> sprites = new ArrayList<Sprite>();
     sprites.add(new Sprite1());
     sprites.add(new Apple());
-    Stage stage = new Stage("forever-touching-multisprite-rotation/4.png");
+    Stage stage = new Stage("forever-touching-multisprite-rotation/4.svg");
     Controller c = new GameController(sprites, stage);
     DrawController dc = new DrawController(c);
     dc.start();

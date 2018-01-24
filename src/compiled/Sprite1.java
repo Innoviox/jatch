@@ -42,7 +42,7 @@ public class Sprite1 extends Sprite {
       }
       ;
       if (tempBool) {
-        move(1);
+        move(10);
       }
       turnL(15);
       Thread.sleep(1000 / 40);
