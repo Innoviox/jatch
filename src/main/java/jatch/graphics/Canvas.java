@@ -27,6 +27,7 @@ public class Canvas extends JFrame {
 		this.setSize(MAXWIDTH, MAXHEIGHT);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.objects = objects;
+		// for (Sprite s: objects) this.addMouseListener(s);
 		this.stage = stage;
 		this.setContentPane(stage);
 	}
@@ -72,7 +73,6 @@ public class Canvas extends JFrame {
 		}
 		
 		*/
-		
 		super.paintComponents(g);
 		// g.drawImage(stage.getImage(), 0, 0, MAXWIDTH, MAXHEIGHT, new Color(0, 0, 0), null);
 		for (Sprite p : objects) paint(p, g);

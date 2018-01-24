@@ -127,7 +127,7 @@ public class Reader {
 		}
 		init();
 		List<Script> scripts = extractScripts(child);
-		String java = String.format("package compiled;\nimport main.java.jatch.script.*;import main.java.jatch.files.Reader;import java.util.ArrayList;import java.awt.Image;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;private Controller controller;public %s() { this(false); } public %s(boolean cloned) { this.cloned = cloned; %s }", child.get("objName"), child.get("objName"), child.get("objName"), "%s");
+		String java = String.format("package compiled;\nimport main.java.jatch.script.*;import main.java.jatch.files.Reader;import java.util.ArrayList;import java.awt.Image;\npublic class %s extends Sprite {\nprivate String tempString;private boolean tempBool;private Controller controller;private ExprEval ee;public %s() { this(false); } public %s(boolean cloned) { this.cloned = cloned; %s }", child.get("objName"), child.get("objName"), child.get("objName"), "%s");
 		
 		if (child.containsKey("variables")) {
 			for (Object _vars: (Object[]) child.get("variables")) {
@@ -164,8 +164,8 @@ public class Reader {
 		String java = "";
 		String header = null;
 		String currHook = null;
-		String ee = "ExprEval ee = new ExprEval(\"%s\", this);\n";
-		String eevar = "ExprEval ee = new ExprEval(%s);\n";
+		String ee = "ee = new ExprEval(\"%s\", this);\n";
+		String eevar = "ee = new ExprEval(%s);\n";
 		String tb = "tempBool = Boolean.parseBoolean(ee.parse())";
 		for (Script s: scripts) {	
 			if ("DUMMY".equals(s.cmd)) {
@@ -229,7 +229,7 @@ public class Reader {
 										add = String.format(eevar, o[1]) + tb;
 									else
 										add = String.format(ee, Arrays.deepToString(o)) + tb;
-									cntrl = String.format(cntrl, add, "%s");
+									cntrl = String.format(cntrl, "%s", add);
 								} else {
 									if (o[0].equals("getParam")) 
 										java += String.format(eevar, o[1]);

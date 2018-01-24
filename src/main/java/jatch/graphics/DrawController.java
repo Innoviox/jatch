@@ -7,9 +7,9 @@ import java.util.concurrent.TimeUnit;
 import main.java.jatch.script.Controller;
 
 public class DrawController {
-    private Canvas canvas;
+    protected Canvas canvas;
     // private Runnable update;
-    private Controller controller;
+    protected Controller controller;
     
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -19,7 +19,7 @@ public class DrawController {
     	}
     
     public void start() throws Exception {
-    		canvas.show();
+    		canvas.setVisible(true);
     		controller.whenFlagClicked();
         Runnable update = () -> {
 			try {

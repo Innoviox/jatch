@@ -3,12 +3,20 @@ package main.java.jatch.script;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +52,7 @@ public abstract class Sprite extends JComponent implements MouseListener {
 	protected Controller controller;
 	protected boolean touchingPtr;
 	protected Pen pen;
-	protected Image img;
+	protected BufferedImage img;
 	protected Map<String, Double> effects;
 	/* public Map<String, Variable> vars = new HashMap(); */
 	protected boolean draw;
@@ -59,6 +67,8 @@ public abstract class Sprite extends JComponent implements MouseListener {
 	protected MidiChannel[] mChannels;
 	public static final int MAXWIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	public static final int MAXHEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	public AffineTransform at;
+	private BufferedImage _img;
 	
 	public static void initialize() throws MidiUnavailableException {
         midiSynth = MidiSystem.getSynthesizer(); 
@@ -73,44 +83,82 @@ public abstract class Sprite extends JComponent implements MouseListener {
 		this.controller = c;
 		this.lists = new HashMap<String, List<Object>>();
 		// this.pen = new StandardPen(c.getDrawController().getCanvas());
-		this.img = costumes.get(0);
-		c.addMouseListener(this);
+		this.img = (BufferedImage)costumes.get(0);
+		at = new AffineTransform();
+		this._img = deepCopy(img);
+	}
+	
+	private BufferedImage deepCopy(BufferedImage bi) {
+		 ColorModel cm = bi.getColorModel();
+		 boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		 WritableRaster raster = bi.copyData(null);
+		 return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 	
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(img, MAXWIDTH / 2 + (int)xPos, MAXHEIGHT / 2 + (int)yPos, this);
+        g.drawImage(_img, MAXWIDTH / 2 + (int)xPos, MAXHEIGHT / 2 + (int)yPos, this);
     }
     
 	// Motion
+    private void pointImg() {
+    		// cmpdir();
+    		// System.out.println(dir);
+        // 4. translate it to the center of the component
+    		at = new AffineTransform();
+
+        // 3. do the actual rotation
+        at.rotate(Math.toRadians(dir), img.getWidth() / 2, img.getHeight() / 2);
+
+        // 2. just a scale because this image is big
+        // at.scale(0.5, 0.5);
+
+        // 1. translate the object so that you rotate it around the 
+        //    center (easier :))
+        // at.translate(-img.getWidth()/2, -img.getHeight()/2);    	
+        AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        _img = op.filter(img, null);
+    }
+    
+    private void cmpdir() {
+    		if (dir < -360) dir = -dir - 360;
+    		if (dir > 360) dir = -dir + 360;
+    }
 	public void move(double steps) {
 		xPos += Math.cos(dir) * steps;
 		yPos += Math.sin(dir) * steps;
 	}
 	
 	public void turnR(double degs) {
-		dir += degs;
+		if (dir > 0) dir -= degs;
+		else dir += degs;
 		// TODO: rotate actual image
 		// TODO: account for different rotation styles
+		pointImg();
 	}
 	
 	public void turnL(double degs) {
-		dir -= degs;
+		if (dir < 0) dir -= degs;
+		else dir -= degs;
 		// TODO: rotate actual image
 		// TODO: account for different rotation styles
+		pointImg();
 	}
 	
 	public void point(double degs) {
 		dir = degs;
+		pointImg();
 	}
 	
 	public void pointTowards(Sprite thing) {
 		dir = Math.atan((xPos - thing.xPos / (yPos - thing.yPos)));
+		pointImg();
 	}
 	
 	public void pointTowardsPtr() {
 		dir = Math.atan((xPos - mouseX()) / (yPos - mouseY()));
+		pointImg();
 	}
 	
 	public void goTo(double x, double y) {
@@ -203,7 +251,7 @@ public abstract class Sprite extends JComponent implements MouseListener {
 	
 	public void switchCostume(String nc) {
 		costumeN = nc;
-		img = Reader.getImageFile(nc);
+		img = (BufferedImage) Reader.getImageFile(nc);
 	}
 	
 	public void nextCostume() {
