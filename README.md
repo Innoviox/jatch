@@ -19,3 +19,5 @@ To run:
   6. Run Main again. It should spit out some text into the console.
   7. Right-click the src/ folder and click "refresh".
   8. Your newly compiled project is in compiled/. Run the Game class.
+
+Note: The repo comes with several pre-downloaded .sb2s just for you!
