@@ -5,22 +5,21 @@ import main.java.jatch.files.Reader;
 import java.util.ArrayList;
 import java.awt.Image;
 
-public class Sprite1 extends Sprite {
+public class Apple extends Sprite {
   private String tempString;
   private boolean tempBool;
   private Controller controller;
   private ExprEval ee;
 
-  public Sprite1() {
+  public Apple() {
     this(false);
   }
 
-  public Sprite1(boolean cloned) {
+  public Apple(boolean cloned) {
     this.cloned = cloned;
     this.addMouseListener(this);
     costumes = new ArrayList<Image>();
-    costumes.add(Reader.getImageFile("forever-touching-multisprite-rotation/1.svg"));
-    costumes.add(Reader.getImageFile("forever-touching-multisprite-rotation/2.svg"));
+    costumes.add(Reader.getImageFile("forever-touching-multisprite-rotation/3.svg"));
   }
 
   public void whenClicked() throws Exception {}
@@ -34,7 +33,7 @@ public class Sprite1 extends Sprite {
   public void whenKeyPressed(String key) throws Exception {}
 
   public void whenFlagClicked() throws Exception {
-    while (true) {
+    while (!tempBool) {
       tempString = "_mouse_";
       if (tempString.equals("_mouse_")) {
         tempBool = touchingPtr();
@@ -45,7 +44,9 @@ public class Sprite1 extends Sprite {
       if (tempBool) {
         move(10);
       }
-      turnL(15);
+      turnR(15);
+      ee = new ExprEval("[=, 1, 2]", this);
+      tempBool = Boolean.parseBoolean(ee.parse());
       Thread.sleep(1000 / 40);
     }
   }
