@@ -1,0 +1,113 @@
+{
+	"objName": "Stage",
+	"sounds": [{
+			"soundName": "pop",
+			"soundID": 1,
+			"md5": "83a9787d4cb6f3b7632b4ddfebf74367.wav",
+			"sampleCount": 258,
+			"rate": 11025,
+			"format": ""
+		}],
+	"costumes": [{
+			"costumeName": "blue sky",
+			"baseLayerID": 4,
+			"baseLayerMD5": "32c395c60534db0e100c962cdbb1d7a7.svg",
+			"bitmapResolution": 1,
+			"rotationCenterX": 245,
+			"rotationCenterY": 183
+		}],
+	"currentCostumeIndex": 0,
+	"penLayerMD5": "5c81a336fab8be57adc039a8a2b33ca9.png",
+	"penLayerID": 0,
+	"tempoBPM": 60,
+	"videoAlpha": 0.5,
+	"children": [{
+			"objName": "Sprite1",
+			"scripts": [[25,
+					16,
+					[["whenGreenFlag"],
+						["doForever",
+							[["doIf", ["touching:", "_mouse_"], [["forward:", 10]]], ["turnLeft:", 15]]]]]],
+			"sounds": [{
+					"soundName": "meow",
+					"soundID": 0,
+					"md5": "83c36d806dc92327b9e7049a565c6bff.wav",
+					"sampleCount": 18688,
+					"rate": 22050,
+					"format": ""
+				}],
+			"costumes": [{
+					"costumeName": "costume1",
+					"baseLayerID": 1,
+					"baseLayerMD5": "09dc888b0b7df19f70d81588ae73420e.svg",
+					"bitmapResolution": 1,
+					"rotationCenterX": 47,
+					"rotationCenterY": 55
+				},
+				{
+					"costumeName": "costume2",
+					"baseLayerID": 2,
+					"baseLayerMD5": "3696356a03a8d938318876a593572843.svg",
+					"bitmapResolution": 1,
+					"rotationCenterX": 47,
+					"rotationCenterY": 55
+				}],
+			"currentCostumeIndex": 0,
+			"scratchX": 37.88746909033975,
+			"scratchY": 144.2235702632003,
+			"scale": 1,
+			"direction": -165,
+			"rotationStyle": "normal",
+			"isDraggable": false,
+			"indexInLibrary": 1,
+			"visible": true,
+			"spriteInfo": {
+			}
+		},
+		{
+			"objName": "Apple",
+			"scripts": [[11,
+					23,
+					[["whenGreenFlag"],
+						["doUntil",
+							["=", "1", "2"],
+							[["doIf", ["touching:", "_mouse_"], [["forward:", 10]]], ["turnRight:", 15]]]]]],
+			"sounds": [{
+					"soundName": "pop",
+					"soundID": 1,
+					"md5": "83a9787d4cb6f3b7632b4ddfebf74367.wav",
+					"sampleCount": 258,
+					"rate": 11025,
+					"format": ""
+				}],
+			"costumes": [{
+					"costumeName": "apple",
+					"baseLayerID": 3,
+					"baseLayerMD5": "831ccd4741a7a56d85f6698a21f4ca69.svg",
+					"bitmapResolution": 1,
+					"rotationCenterX": 31,
+					"rotationCenterY": 31
+				}],
+			"currentCostumeIndex": 0,
+			"scratchX": 201.4313857459614,
+			"scratchY": 33.749563961223174,
+			"scale": 1,
+			"direction": -75,
+			"rotationStyle": "normal",
+			"isDraggable": false,
+			"indexInLibrary": 2,
+			"visible": true,
+			"spriteInfo": {
+			}
+		}],
+	"info": {
+		"scriptCount": 2,
+		"hasCloudData": false,
+		"spriteCount": 2,
+		"userAgent": "Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/63.0.3239.132 Safari\/537.36",
+		"swfVersion": "v459.1",
+		"videoOn": false,
+		"flashVersion": "MAC 28,0,0,137",
+		"projectID": "199644558"
+	}
+}
